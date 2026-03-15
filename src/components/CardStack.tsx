@@ -28,16 +28,21 @@ const CardStack = ({ cards, onLike, onPass, onSuperLike }: CardStackProps) => {
       <AnimatePresence>
         {cards.map((card, index) => {
           const isTop = index === cards.length - 1;
-          const y = (cards.length - 1 - index) * 12;
-          const scale = 1 - (cards.length - 1 - index) * 0.05;
+          // Keep a small vertical offset for the stacking effect
+          const y = (cards.length - 1 - index) * 10;
 
           return (
             <motion.div
               key={card.id}
-              className="absolute w-[90%] h-[65%]"
-              initial={{ scale, y, opacity: 1 - (cards.length - 1 - index) * 0.2 }}
-              animate={{ scale, y, opacity: 1 - (cards.length - 1 - index) * 0.2 }}
-              exit={{ x: card.id === cards[cards.length - 1].id ? (Math.random() > 0.5 ? 300 : -300) : 0, opacity: 0 }}
+              className="absolute w-full h-full" // Allow card to fill the container
+              style={{ zIndex: index }} // Ensure correct stacking order
+              initial={{ y, scale: 1 }}
+              animate={{ y, scale: 1 }}
+              exit={{ 
+                x: card.id === cards[cards.length - 1].id ? (Math.random() > 0.5 ? 300 : -300) : 0, 
+                opacity: 0,
+                transition: { duration: 0.2 }
+              }}
               transition={{ type: 'spring', stiffness: 350, damping: 30 }}
             >
               <SwipeCard
@@ -46,11 +51,7 @@ const CardStack = ({ cards, onLike, onPass, onSuperLike }: CardStackProps) => {
                 onLike={() => onLike(card)}
                 onPass={() => onPass(card.id)}
                 onSuperLike={() => onSuperLike(card)}
-                initialY={y}
-                initialScale={scale}
               />
-              {index === cards.length - 2 && <div className="absolute inset-0 bg-black/10 rounded-3xl backdrop-filter brightness-95 blur-sm" />} 
-              {index === cards.length - 3 && <div className="absolute inset-0 bg-black/20 rounded-3xl backdrop-filter brightness-90 blur-md" />}
             </motion.div>
           );
         })}

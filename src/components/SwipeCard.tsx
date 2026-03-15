@@ -13,11 +13,11 @@ interface CardProps {
   tags: string[];
 }
 
-const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initialScale }) => {
+const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike }) => {
   const [hasInteracted, setHasInteracted] = useState(false);
   const x = useMotionValue(0);
-  const y = useMotionValue(initialY || 0);
-  const scale = useMotionValue(initialScale || 1);
+  const y = useMotionValue(0);
+  const scale = useMotionValue(1);
   const controls = useAnimation();
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initial
 
   return (
     <motion.div
-      className={`absolute w-full h-full rounded-3xl overflow-hidden bg-surface shadow-card-main ${isTop ? 'cursor-grab' : ''}`}
+      className={`absolute w-full rounded-3xl overflow-hidden bg-surface shadow-card-main ${isTop ? 'cursor-grab' : ''}`}
       style={{ x, y, rotate, scale }}
       drag={isTop}
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
@@ -90,7 +90,7 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initial
       </AnimatePresence>
 
       {/* Card Content */}
-      <div className="relative h-[65%] w-full">
+      <div className="relative w-full aspect-square">
         <Image
             src={card.image}
             alt={card.name}
@@ -100,7 +100,7 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initial
           />
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
-      <div className="relative h-[35%] bg-white p-4 flex flex-col rounded-b-[24px]">
+      <div className="relative bg-white p-4 flex flex-col rounded-b-[24px]">
         {/* 1. Title & Price */}
         <div className="flex justify-between items-baseline">
           <h2 className="text-xl font-extrabold text-gray-900 line-clamp-1 flex-1 pr-2">{card.name}</h2>

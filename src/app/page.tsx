@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import Image from 'next/image';
 import { MapPin, ScanLine, ArrowRight, Navigation, MessageSquare, ArrowLeft, User, Users, RotateCcw } from 'lucide-react';
 import CardStack from '@/components/CardStack'; // Assuming this is our well-designed card stack
 import { FOOD_ITEMS } from '@/lib/data'; // Assuming data is here
@@ -142,19 +143,19 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
   
   if (cards.length === 0) {
     return (
-      <div className="h-full w-full flex flex-col items-center justify-center bg-background p-4">
+      <div className="h-full w-full flex flex-col items-center justify-center bg-[#1A1A1A] p-4 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
           className="text-center"
         >
-          <MapPin className="text-gray-300 w-16 h-16 mx-auto" />
-          <h3 className="text-lg font-semibold text-text-primary mt-4">附近的优质推荐已刷完啦 ✨</h3>
-          <p className="text-text-secondary mt-1">快去看看你挑选了哪些美食吧！</p>
+          <MapPin className="text-gray-600 w-16 h-16 mx-auto" />
+          <h3 className="text-lg font-semibold text-gray-300 mt-4">附近的优质推荐已刷完啦 ✨</h3>
+          <p className="text-gray-500 mt-1">快去看看你挑选了哪些美食吧！</p>
           <button 
             onClick={() => setAppStep('SUMMARY')}
-            className="mt-8 w-full max-w-xs bg-brand-primary text-black font-bold text-lg rounded-xl py-4 shadow-lg flex items-center justify-center gap-2"
+            className="mt-8 w-full max-w-xs bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg rounded-xl py-4 shadow-[0_0_20px_rgba(255,195,0,0.3)] flex items-center justify-center gap-2"
           >
             查看我的决策池 👉
           </button>
@@ -164,13 +165,14 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
   }
 
   return (
-    <div className="h-full w-full flex flex-col items-center bg-background">
-      <header className="absolute top-0 z-30 w-full p-4 flex items-center justify-between gap-2 bg-white/80 backdrop-blur-xl border-b border-gray-100/50">
+    <div className="h-full w-full flex flex-col bg-[#1A1A1A] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
+      {/* Header */}
+      <header className="flex-shrink-0 w-full p-4 flex items-center justify-between gap-2 z-30 bg-black/10 backdrop-blur-xl border-b border-white/10">
         <div className="flex items-center gap-2">
-          <MapPin size={20} className="text-green-500" />
-          <span className="font-bold text-gray-800">浙江大学（紫金港校区）</span>
+          <MapPin size={20} className="text-green-400" />
+          <span className="font-bold text-white">浙江大学（紫金港校区）</span>
         </div>
-        <button onClick={onToggleMode} className="px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium flex items-center gap-1 bg-white shadow-sm transition-colors active:bg-gray-50">
+        <button onClick={onToggleMode} className="px-3 py-1.5 rounded-full border border-white/20 text-xs font-medium flex items-center gap-1 bg-white/10 text-white shadow-sm transition-colors active:bg-white/20">
           {isGroupMode ? (
             <><User size={14} /> 切换单人</>
           ) : (
@@ -179,48 +181,40 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
         </button>
       </header>
 
-      <div className="absolute top-[72px] z-20 w-full flex gap-2 px-4 py-2 overflow-x-auto hide-scrollbar">
-        <button className="whitespace-nowrap px-3 py-1.5 bg-yellow-50 text-yellow-700 text-xs rounded-full font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.02)]">👑 必吃榜</button>
-        <button className="whitespace-nowrap px-3 py-1.5 bg-white border border-gray-100 rounded-full text-xs text-gray-600 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">🛵 30分钟达</button>
-        <button className="whitespace-nowrap px-3 py-1.5 bg-white border border-gray-100 rounded-full text-xs text-gray-600 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">💰 20元内</button>
-        <button className="whitespace-nowrap px-3 py-1.5 bg-white border border-gray-100 rounded-full text-xs text-gray-600 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">⭐️ 评分最高</button>
-      </div>
+      {/* Main content area for CardStack */}
+      <main className="flex-1 flex flex-col items-center justify-center p-4">
+        <div className="relative w-full h-full max-w-sm">
+          <CardStack cards={cards} onLike={(c) => handleAction(c, 'like')} onPass={() => handleAction(cards[cards.length - 1], 'pass')} onSuperLike={() => handleAction(cards[cards.length - 1], 'superlike')} />
+        </div>
+      </main>
 
-      <CardStack cards={cards} onLike={(c) => handleAction(c, 'like')} onPass={() => handleAction(cards[cards.length - 1], 'pass')} onSuperLike={() => handleAction(cards[cards.length - 1], 'superlike')} />
-
-      <div className="absolute right-4 bottom-36 z-20">
-        <button className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-md border border-gray-100 shadow-glass flex items-center justify-center text-gray-500 active:scale-95 transition-transform">
-          <RotateCcw size={20} />
-        </button>
-      </div>
-
-      <div className="absolute bottom-28 z-20 w-full text-center">
-        <p className="text-[10px] text-gray-400 mb-2">✨ 附近还有 18 家优质推荐</p>
-      </div>
-
-      {isGroupMode ? (
-        <div className="absolute bottom-0 z-40 w-full h-28 bg-white/90 backdrop-blur-lg border-t border-gray-100 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] p-4 flex items-center justify-center">
-          <div className="flex items-center">
-            <div className="flex -space-x-4">
-              <span className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-lg shadow-sm">🐶</span>
-              <span className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-lg shadow-sm">🐱</span>
-              <span className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-lg shadow-sm">🐼</span>
+      {/* Footer / Bottom Bar */}
+      <footer className="flex-shrink-0 w-full z-40 bg-black/10 backdrop-blur-xl border-t border-white/10">
+        {isGroupMode ? (
+          <div className="h-28 p-4 flex items-center justify-center">
+            <div className="flex items-center">
+              <div className="flex -space-x-4">
+                <span className="w-10 h-10 rounded-full border-2 border-gray-800 bg-gray-700 flex items-center justify-center text-lg shadow-sm">🐶</span>
+                <span className="w-10 h-10 rounded-full border-2 border-gray-800 bg-gray-700 flex items-center justify-center text-lg shadow-sm">🐱</span>
+                <span className="w-10 h-10 rounded-full border-2 border-gray-800 bg-gray-700 flex items-center justify-center text-lg shadow-sm">🐼</span>
+              </div>
+              <p className="ml-4 font-semibold text-gray-400">正在等待室友滑动... (已选 <span className="text-white font-bold">{shortlist.length}</span> 家)</p>
             </div>
-            <p className="ml-4 font-semibold text-gray-600">正在等待室友滑动... (已选 <span className="text-gray-900 font-bold">{shortlist.length}</span> 家)</p>
           </div>
-        </div>
-      ) : (
-        <div className="absolute bottom-0 z-40 w-full h-28 bg-white/90 backdrop-blur-lg border-t border-gray-100 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] p-4 flex items-center justify-between">
-          <p className="font-semibold text-gray-500">已将 <span className="text-gray-800 font-bold">{shortlist.length}</span> 家餐厅加入备选</p>
-          <button 
-            onClick={() => setAppStep('SUMMARY')}
-            disabled={shortlist.length === 0}
-            className="font-bold text-lg rounded-full px-6 py-3 transition-all disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.3)] animate-pulse-slow"
-          >
-            对比决策 👉
-          </button>
-        </div>
-      )}
+        ) : (
+          <div className="h-28 p-4 flex items-center justify-between">
+            <p className="font-semibold text-gray-400">已将 <span className="text-white font-bold">{shortlist.length}</span> 家餐厅加入备选</p>
+            <button 
+              onClick={() => setAppStep('SUMMARY')}
+              disabled={shortlist.length === 0}
+              className="font-bold text-lg rounded-full px-6 py-3 transition-all disabled:bg-gray-700 disabled:text-gray-500 disabled:shadow-none bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.3)] animate-pulse-slow"
+            >
+              对比决策 👉
+            </button>
+          </div>
+        )}
+      </footer>
+
       <AnimatePresence>
         {showMatchModal && <MatchModal matchedItem={shortlist[2]} onConfirm={handleConfirmMatch} />}
       </AnimatePresence>
@@ -237,7 +231,7 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
             };
 
             const finalShortlist = superLikedItem ? [superLikedItem] : shortlist;
-            const subtotal = finalShortlist.reduce((acc, item) => acc + item.price, 0);
+            const subtotal = finalShortlist.reduce((acc, item) => acc + parseFloat(item.price), 0);
             const packagingFee = 2.5;
             const deliveryFee = 5;
             const total = subtotal + packagingFee + deliveryFee;
@@ -271,7 +265,7 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
                                 <Image src={item.image} alt={item.name} width={40} height={40} className="w-10 h-10 rounded-md object-cover"/>
                                 <span className="font-semibold text-gray-700">{item.name}</span>
                               </div>
-                              <span className="font-bold text-lg text-green-600">¥{item.price.toFixed(2)}</span>
+                              <span className="font-bold text-lg text-green-600">¥{parseFloat(item.price).toFixed(2)}</span>
                             </div>
                           ))}
                         </div>
@@ -346,7 +340,7 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
                               <p className="text-sm text-gray-500">默认</p>
                             </div>
                             <div className="text-right">
-                              <p className="font-bold text-gray-900">¥{item.price.toFixed(2)}</p>
+                              <p className="font-bold text-gray-900">¥{parseFloat(item.price).toFixed(2)}</p>
                               <p className="text-sm text-gray-400">x1</p>
                             </div>
                           </div>
