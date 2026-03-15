@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { PanInfo, motion, useMotionValue, useTransform, AnimatePresence, useAnimation } from "framer-motion";
 import Image from "next/image";
 import { X, Heart } from 'lucide-react';
@@ -15,17 +15,29 @@ interface CardProps {
 
 const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike }) => {
   const [hasInteracted, setHasInteracted] = useState(false);
+  const isMounted = useRef(true);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const scale = useMotionValue(1);
   const controls = useAnimation();
 
+  // Set isMounted to false when the component unmounts to prevent state updates on unmounted components
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   useEffect(() => {
     const sequence = async () => {
       if (isTop && !hasInteracted) {
+        // Wait for a bit before starting the animation
         await new Promise(resolve => setTimeout(resolve, 1500));
-        // Check if component is still mounted before starting animation
-        if (controls) {
+        
+        // CRITICAL FIX: Only start the animation if the component is still mounted.
+        // This prevents the "controls.start() should only be called after a component has mounted" error
+        // which is a race condition that happens if the component unmounts during the timeout.
+        if (isMounted.current) {
           await controls.start({
             x: [0, 20, -20, 0],
             rotate: [0, 5, -5, 0],

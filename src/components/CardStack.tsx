@@ -16,7 +16,7 @@ export interface CardData {
 // 2. 严格定义 page.tsx 传过来的 Props
 interface CardStackProps {
   cards: CardData[];
-  onPass: (id: number) => void;
+  onPass: (card: CardData) => void;
   onLike: (card: CardData) => void;
   onSuperLike: (card: CardData) => void;
 }
@@ -49,7 +49,7 @@ const CardStack = ({ cards, onLike, onPass, onSuperLike }: CardStackProps) => {
                 card={card}
                 isTop={isTop}
                 onLike={() => onLike(card)}
-                onPass={() => onPass(card.id)}
+                onPass={() => onPass(card)}
                 onSuperLike={() => onSuperLike(card)}
               />
             </motion.div>
