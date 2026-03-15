@@ -3,9 +3,24 @@
 import { useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const CheckoutSheet = ({ isOpen, onClose, items }) => {
+// 1. 定义单个菜品的数据结构
+interface CartItem {
+  id: string | number;
+  name: string;
+  price: string | number;
+}
+
+// 2. 定义组件接收的 Props 类型
+interface CheckoutSheetProps {
+  isOpen: boolean;
+  onClose: () => void;
+  items: CartItem[];
+}
+
+// 3. 将类型应用到组件参数上
+const CheckoutSheet = ({ isOpen, onClose, items }: CheckoutSheetProps) => {
   const total = useMemo(() => 
-    items.reduce((sum, item) => sum + parseFloat(item.price), 0),
+    items.reduce((sum, item) => sum + parseFloat(item.price as string), 0),
     [items]
   );
 

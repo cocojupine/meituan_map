@@ -47,20 +47,6 @@ const SwipeCard = ({ card, isTop, onRemove, initialY, initialScale }: SwipeCardP
       onDragEnd={handleDragEnd}
       dragElastic={0.7}
     >
-      {/* 0. 微交互印章 */}
-      <motion.div 
-        className="absolute top-8 right-8 z-10 text-yellow-400 border-4 border-yellow-400 rounded-xl p-2 font-bold text-3xl -rotate-12"
-        style={{ opacity: likeOpacity, scale: likeScale }}
-      >
-        加入购物车
-      </motion.div>
-      <motion.div 
-        className="absolute top-8 left-8 z-10 text-gray-400 border-4 border-gray-400 rounded-xl p-2 font-bold text-3xl rotate-12"
-        style={{ opacity: skipOpacity, scale: skipScale }}
-      >
-        跳过
-      </motion.div>
-
       {/* 1. 上半层 (Image) */}
       <div className="relative h-[65%] w-full">
         <Image

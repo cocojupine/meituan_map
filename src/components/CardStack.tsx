@@ -41,6 +41,8 @@ const CardStack = () => {
                 initialScale={1 - (cards.length - 1 - index) * 0.05}
                 onRemove={handleRemove}
               />
+              {index === cards.length - 2 && <div className="absolute inset-0 bg-black/10 rounded-3xl backdrop-filter brightness-95 blur-sm" />} 
+              {index === cards.length - 3 && <div className="absolute inset-0 bg-black/20 rounded-3xl backdrop-filter brightness-90 blur-md" />}
             </motion.div>
           );
         })}
