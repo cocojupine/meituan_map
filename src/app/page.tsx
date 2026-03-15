@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MapPin, ScanLine, ArrowRight, Navigation, MessageSquare, ArrowLeft } from 'lucide-react';
+import { MapPin, ScanLine, ArrowRight, Navigation, MessageSquare, ArrowLeft, User, Users, RotateCcw } from 'lucide-react';
 import CardStack from '@/components/CardStack'; // Assuming this is our well-designed card stack
 import { FOOD_ITEMS } from '@/lib/data'; // Assuming data is here
 
@@ -27,10 +27,7 @@ const SearchView = ({ setAppStep, setIsGroupMode }) => {
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className="w-full max-w-sm bg-white/5 backdrop-blur-2xl rounded-3xl p-6 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-white"
     >
-      <div className="text-center mb-6">
-        <p className="text-xs text-gray-400">☁️ 阴天，适合在寝室点外卖</p>
-        <h2 className="text-2xl font-bold tracking-tight text-white mt-1">今天在紫金港怎么吃？</h2>
-      </div>
+      <h2 className="text-3xl font-extrabold tracking-tight text-white mb-6 text-center">今天想怎么吃？</h2>
       <div className="flex items-center bg-black/20 p-1 rounded-full my-6">
         <button 
           onClick={() => setLocalIsGroup(false)}
@@ -47,7 +44,7 @@ const SearchView = ({ setAppStep, setIsGroupMode }) => {
       </div>
       <button 
         onClick={handleStart}
-        className="w-full bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg rounded-xl py-4 shadow-[0_0_20px_rgba(255,195,0,0.3)] flex items-center justify-center gap-2 text-shadow-sm"
+        className="w-full bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black text-lg font-bold py-4 rounded-full shadow-[0_8px_20px_rgba(255,195,0,0.3)] hover:scale-[1.02] transition-transform flex items-center justify-center gap-2"
       >
         <ScanLine size={20} />
         锁定范围，生成美食牌库
@@ -115,7 +112,7 @@ const MatchModal = ({ matchedItem, onConfirm }) => (
   </motion.div>
 );
 
-const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isGroupMode }) => {
+const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isGroupMode, onToggleMode }) => {
   const [cards, setCards] = useState(FOOD_ITEMS);
   const [showMatchModal, setShowMatchModal] = useState(false);
 
@@ -168,24 +165,52 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
 
   return (
     <div className="h-full w-full flex flex-col items-center bg-background">
-      <header className="absolute top-0 z-30 w-full p-4 flex items-center gap-2 bg-[#F4F5F7]/80 backdrop-blur-xl">
-        <MapPin size={20} className="text-green-500" />
-        <span className="font-bold text-gray-800">浙江大学（紫金港校区）</span>
+      <header className="absolute top-0 z-30 w-full p-4 flex items-center justify-between gap-2 bg-white/80 backdrop-blur-xl border-b border-gray-100/50">
+        <div className="flex items-center gap-2">
+          <MapPin size={20} className="text-green-500" />
+          <span className="font-bold text-gray-800">浙江大学（紫金港校区）</span>
+        </div>
+        <button onClick={onToggleMode} className="px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium flex items-center gap-1 bg-white shadow-sm transition-colors active:bg-gray-50">
+          {isGroupMode ? (
+            <><User size={14} /> 切换单人</>
+          ) : (
+            <><Users size={14} /> 切换组局</>
+          )}
+        </button>
       </header>
+
+      <div className="absolute top-[72px] z-20 w-full flex gap-2 px-4 py-2 overflow-x-auto hide-scrollbar">
+        <button className="whitespace-nowrap px-3 py-1.5 bg-yellow-50 text-yellow-700 text-xs rounded-full font-semibold shadow-[0_2px_8px_rgba(0,0,0,0.02)]">👑 必吃榜</button>
+        <button className="whitespace-nowrap px-3 py-1.5 bg-white border border-gray-100 rounded-full text-xs text-gray-600 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">🛵 30分钟达</button>
+        <button className="whitespace-nowrap px-3 py-1.5 bg-white border border-gray-100 rounded-full text-xs text-gray-600 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">💰 20元内</button>
+        <button className="whitespace-nowrap px-3 py-1.5 bg-white border border-gray-100 rounded-full text-xs text-gray-600 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">⭐️ 评分最高</button>
+      </div>
+
       <CardStack cards={cards} onLike={(c) => handleAction(c, 'like')} onPass={() => handleAction(cards[cards.length - 1], 'pass')} onSuperLike={() => handleAction(cards[cards.length - 1], 'superlike')} />
+
+      <div className="absolute right-4 bottom-36 z-20">
+        <button className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-md border border-gray-100 shadow-glass flex items-center justify-center text-gray-500 active:scale-95 transition-transform">
+          <RotateCcw size={20} />
+        </button>
+      </div>
+
+      <div className="absolute bottom-28 z-20 w-full text-center">
+        <p className="text-[10px] text-gray-400 mb-2">✨ 附近还有 18 家优质推荐</p>
+      </div>
+
       {isGroupMode ? (
-        <div className="absolute bottom-0 z-40 w-full h-28 bg-white/80 backdrop-blur-xl p-4 flex items-center justify-center shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+        <div className="absolute bottom-0 z-40 w-full h-28 bg-white/90 backdrop-blur-lg border-t border-gray-100 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] p-4 flex items-center justify-center">
           <div className="flex items-center">
             <div className="flex -space-x-4">
-              <span className="w-10 h-10 rounded-full border-[3px] border-white bg-gray-200 flex items-center justify-center text-lg shadow-md">🐶</span>
-              <span className="w-10 h-10 rounded-full border-[3px] border-white bg-gray-200 flex items-center justify-center text-lg shadow-md">🐱</span>
-              <span className="w-10 h-10 rounded-full border-[3px] border-white bg-gray-200 flex items-center justify-center text-lg shadow-md">🐼</span>
+              <span className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-lg shadow-sm">🐶</span>
+              <span className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-lg shadow-sm">🐱</span>
+              <span className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-lg shadow-sm">🐼</span>
             </div>
             <p className="ml-4 font-semibold text-gray-600">正在等待室友滑动... (已选 <span className="text-gray-900 font-bold">{shortlist.length}</span> 家)</p>
           </div>
         </div>
       ) : (
-        <div className="absolute bottom-0 z-40 w-full h-28 bg-white/80 backdrop-blur-xl p-4 flex items-center justify-between shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+        <div className="absolute bottom-0 z-40 w-full h-28 bg-white/90 backdrop-blur-lg border-t border-gray-100 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] p-4 flex items-center justify-between">
           <p className="font-semibold text-gray-500">已将 <span className="text-gray-800 font-bold">{shortlist.length}</span> 家餐厅加入备选</p>
           <button 
             onClick={() => setAppStep('SUMMARY')}
@@ -212,7 +237,7 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
   };
 
   return (
-    <div className="h-full w-full flex flex-col bg-[#F5F6F8]">
+    <div className="min-h-screen bg-[#F5F6F8] pb-32">
       <header className="flex-shrink-0 flex items-center justify-between p-4 bg-white border-b border-gray-100">
         <button onClick={() => { setShortlist([]); setAppStep('SWIPE'); }} className="flex items-center gap-1 text-gray-600 font-medium">
           <ArrowLeft size={20} />
@@ -222,7 +247,7 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
         <div className="w-16" />
       </header>
 
-      <main className="flex-grow p-4 overflow-y-auto">
+      <main className="px-4 pt-4">
         {isGroupMode && shortlist.length > 0 ? (
           <>
             <div className="text-center mb-6">
@@ -244,79 +269,73 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
             </div>
           </>
         ) : (
-          <>
-            <div className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100/50 mb-4">
-              <div className="flex items-start gap-3">
-                <MapPin size={24} className="text-green-500 mt-1 flex-shrink-0" />
-                <div className="flex-grow">
-                  <p className="font-bold text-gray-800">紫金港校区东1大门 (外卖柜)</p>
-                  <p className="text-sm text-gray-500 mt-1">李同学 <span className="ml-2">138****1234</span></p>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100/50">
-              {shortlist.map(item => (
-                <div key={item.id} className="flex items-start gap-4 py-3 border-b border-gray-100 last:border-b-0">
-                  <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
-                  <div className="flex-grow">
-                    <p className="font-bold text-gray-800">{item.name}</p>
-                    <p className="text-xs text-gray-400 mt-1">打包费 ¥1</p>
+          (() => {
+            const finalShortlist = superLikedItem ? [superLikedItem] : shortlist;
+            return (
+              <>
+                <div className="bg-white rounded-2xl p-4 shadow-sm mb-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-lg font-extrabold text-gray-900">紫金港校区东1大门 (外卖柜)</p>
+                      <p className="text-sm text-gray-500 mt-1">李同学 138****1234</p>
+                    </div>
+                    <ChevronRight size={16} className="text-gray-400" />
                   </div>
-                  <p className="font-bold text-gray-800">¥{item.price}</p>
                 </div>
-              ))}
-              <div className="mt-4 space-y-2 text-sm">
-                <div className="flex justify-between text-gray-600">
-                  <span>菜品总价</span>
-                  <span>¥{shortlist.reduce((acc, item) => acc + parseFloat(item.price), 0).toFixed(2)}</span>
+                
+                <div className="bg-white rounded-2xl p-4 shadow-sm mb-4">
+                  {finalShortlist.map(item => (
+                    <div key={item.id} className="flex items-start gap-3 mb-4 last:mb-0">
+                      <img src={item.image} alt={item.name} className="w-16 h-16 rounded-xl object-cover border border-gray-100 shrink-0" />
+                      <div className="flex-1 flex flex-col justify-between h-16">
+                        <p className="text-base font-bold text-gray-900 leading-tight">{item.name}</p>
+                        <div className="flex justify-between items-end">
+                          <span className="text-xs text-gray-500">打包费 ¥1</span>
+                          <p className="font-black text-gray-900">
+                            <span className="text-xs">¥</span>
+                            <span className="text-lg">{item.price}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="border-t border-gray-100 border-dashed mt-2 pt-4 flex flex-col gap-2">
+                    <div className="flex justify-between text-sm text-gray-600">
+                      <span>菜品总价</span>
+                      <span>¥{finalShortlist.reduce((acc, item) => acc + parseFloat(item.price), 0).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-gray-600">
+                      <span>配送费</span>
+                      <span>¥1</span>
+                    </div>
+                    <div className="flex justify-between text-sm text-[#FF4A26]">
+                      <span>美团红包抵扣</span>
+                      <span>-¥5.00</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between text-gray-600">
-                  <span>配送费</span>
-                  <span>¥1</span>
-                </div>
-                <div className="flex justify-between text-red-500 font-medium">
-                  <span>美团红包抵扣</span>
-                  <span>-¥5.00</span>
-                </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-gray-100 text-right">
-                <span className="text-gray-600">合计 </span>
-                <span className="font-bold text-xl text-red-500">¥{(shortlist.reduce((acc, item) => acc + parseFloat(item.price), 0) + 1 - 5).toFixed(2)}</span>
-              </div>
-            </div>
-          </>
+              </>
+            );
+          })()
         )}
       </main>
 
-      <footer className="flex-shrink-0 p-4 bg-white/90 backdrop-blur-xl border-t border-gray-100/80 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+      <footer className="fixed bottom-0 left-0 w-full bg-white px-4 py-3 border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.04)] z-50">
         {isGroupMode ? (
-          <div className="flex flex-col gap-3">
-            <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg rounded-xl py-4 shadow-[0_0_20px_rgba(255,195,0,0.3)]">
-              一键召唤室友拼单
+          <>
+            <button className="w-full text-center text-sm text-gray-500 py-2 mb-1 active:text-gray-700 transition-colors">查看堂食路线</button>
+            <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg py-3.5 rounded-full shadow-[0_4px_12px_rgba(255,195,0,0.3)]">
+              💬 召唤室友拼单
             </button>
-            <button className="w-full bg-gray-200 text-gray-800 font-bold text-lg rounded-xl py-4">
-              查看堂食路线
-            </button>
-          </div>
+          </>
         ) : (
-          <div className="flex justify-around items-center">
-            <button onClick={handleCheckout} className="flex flex-col items-center gap-1.5 text-gray-800">
-              <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black shadow-lg">
-                <ArrowRight size={32} />
-              </div>
-              <span className="text-sm font-semibold">极速外卖下单</span>
-            </button>
-            <button className="flex flex-col items-center gap-1.5 text-gray-500">
-              <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-gray-200">
-                <Navigation size={28} />
-              </div>
-              <span className="text-xs font-semibold">去堂食</span>
-            </button>
-            <button className="flex flex-col items-center gap-1.5 text-gray-500">
-              <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-gray-200">
-                <MessageSquare size={28} />
-              </div>
-              <span className="text-xs font-semibold">发送给室友</span>
+          <div className="flex justify-between items-center">
+            <div className="flex items-baseline gap-1">
+              <span className="text-sm text-gray-900 font-bold">合计</span>
+              <span className="text-2xl font-black text-[#FF4A26]">¥{(shortlist.reduce((acc, item) => acc + parseFloat(item.price), 0) + 1 - 5).toFixed(2)}</span>
+            </div>
+            <button onClick={handleCheckout} className="w-1/2 bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg py-3.5 rounded-full shadow-[0_4px_12px_rgba(255,195,0,0.3)]">
+              🛵 极速外卖下单
             </button>
           </div>
         )}
@@ -348,6 +367,11 @@ export default function Home() {
   const [superLikedItem, setSuperLikedItem] = useState<any | null>(null);
   const [isGroupMode, setIsGroupMode] = useState(false);
 
+  const handleToggleMode = () => {
+    setIsGroupMode(prev => !prev);
+    setShortlist([]);
+  };
+
   const viewVariants = {
     initial: { opacity: 0, y: 10 },
     enter: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
@@ -369,7 +393,7 @@ export default function Home() {
         )}
         {appStep === 'SWIPE' && (
           <motion.div key="swipe" variants={viewVariants} initial="initial" animate="enter" exit="exit" className="w-full h-full">
-            <SwipeView setAppStep={setAppStep} shortlist={shortlist} setShortlist={setShortlist} setSuperLikedItem={setSuperLikedItem} isGroupMode={isGroupMode} />
+            <SwipeView setAppStep={setAppStep} shortlist={shortlist} setShortlist={setShortlist} setSuperLikedItem={setSuperLikedItem} isGroupMode={isGroupMode} onToggleMode={handleToggleMode} />
           </motion.div>
         )}
         {appStep === 'SUMMARY' && (

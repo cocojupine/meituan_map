@@ -99,30 +99,28 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initial
             priority={isTop}
           />
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="absolute bottom-2 left-3 right-3 flex items-end justify-between">
-          <div className="text-white">
-            <h2 className="text-2xl font-bold text-shadow-lg">{card.name}</h2>
-          </div>
-          <p className="text-white font-bold text-shadow-lg">
-            <span className="text-lg">¥</span>
-            <span className="text-3xl">{card.price}</span>
-          </p>
-        </div>
       </div>
       <div className="relative h-[35%] bg-surface p-3 flex flex-col">
-        <div className="flex items-center text-xs text-gray-500 gap-2">
-          <span>⭐️ {card.rating} 分</span>
+        <div className="flex justify-between items-start">
+          <h2 className="text-xl font-bold truncate pr-2">{card.name}</h2>
+          <p className="font-black text-[#FF4A26]">
+            <span className="text-xs">¥</span>
+            <span className="text-2xl">{card.price}</span>
+          </p>
+        </div>
+        <div className="flex items-center text-[11px] text-gray-500 gap-2 mt-1">
+          <span>⭐️ <span className="text-orange-500 font-bold">{card.rating}</span> 分</span>
           <span>{card.sales}</span>
           <span>{card.deliveryTime}</span>
         </div>
         <div className="flex items-center gap-2 mt-2">
-          <span className="bg-red-50 text-red-500 px-2 py-0.5 rounded-md text-xs font-medium">20减10</span>
-          <span className="bg-yellow-50 text-yellow-600 px-2 py-0.5 rounded-md text-xs font-medium">极速退</span>
+          <span className="bg-red-50 text-red-500 px-1.5 py-0.5 rounded text-[10px] font-medium">30减15</span>
+          <span className="bg-red-50 text-red-500 px-1.5 py-0.5 rounded text-[10px] font-medium">新客专享</span>
           <span className="text-xs text-gray-400">{card.deliveryFee}</span>
         </div>
         <div className="flex-grow" />
-        <div className="bg-gray-50 p-2 rounded-lg mt-2">
-          <p className="text-xs text-gray-600 truncate">“{card.review}”</p>
+        <div className="bg-gray-50 rounded-lg p-2 mt-3">
+          <p className="text-xs text-gray-600 line-clamp-2">“{card.review}”</p>
         </div>
       </div>
     </motion.div>
