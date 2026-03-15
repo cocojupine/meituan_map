@@ -20,29 +20,31 @@ const SearchView = ({ setAppStep, setIsGroupMode }) => {
   };
 
   return (
-  <div className="w-full h-full flex items-center justify-center bg-[#1A1A1A] p-4" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(40, 40, 40, 0) 0%, #1A1A1A 70%), linear-gradient(-45deg, rgba(30,30,30,0.8) 25%, transparent 25%, transparent 50%, rgba(30,30,30,0.8) 50%, rgba(30,30,30,0.8) 75%, transparent 75%, transparent)', backgroundSize: '100% 100%, 10px 10px' }}>
+  <div className="w-full h-full flex items-center justify-center bg-[#1A1A1A] p-4 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]">
     <motion.div 
       initial={{ y: 20, opacity: 0 }} 
       animate={{ y: 0, opacity: 1 }} 
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="w-full max-w-sm bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-glass text-white"
+      className="w-full max-w-sm bg-white/5 backdrop-blur-2xl rounded-3xl p-6 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-white"
     >
-      <h2 className="text-2xl font-bold tracking-tight">今天在紫金港怎么吃？</h2>
-      <div className="flex items-center gap-2 bg-black/20 p-1 rounded-full my-6">
+      <h2 className="text-2xl font-bold tracking-tight text-center">今天在紫金港怎么吃？</h2>
+      <div className="flex items-center bg-black/20 p-1 rounded-full my-6">
         <button 
           onClick={() => setLocalIsGroup(false)}
-          className={`w-full text-sm font-semibold py-2 rounded-full transition-colors ${!localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
-          单人快速凑单
+          className={`relative w-full text-sm font-semibold py-2.5 rounded-full transition-colors ${!localIsGroup ? 'text-white' : 'text-gray-400'}`}>
+          {!localIsGroup && <motion.div layoutId="activePill" className="absolute inset-0 bg-white/10 rounded-full shadow-md" />}
+          <span className="relative z-10">单人快速凑单</span>
         </button>
         <button 
           onClick={() => setLocalIsGroup(true)}
-          className={`w-full text-sm font-semibold py-2 rounded-full transition-colors ${localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
-          宿舍组局发牌
+          className={`relative w-full text-sm font-semibold py-2.5 rounded-full transition-colors ${localIsGroup ? 'text-white' : 'text-gray-400'}`}>
+          {localIsGroup && <motion.div layoutId="activePill" className="absolute inset-0 bg-white/10 rounded-full shadow-md" />}
+          <span className="relative z-10">宿舍组局发牌</span>
         </button>
       </div>
       <button 
         onClick={handleStart}
-        className="w-full bg-brand-primary text-black font-bold text-lg rounded-xl py-4 shadow-lg flex items-center justify-center gap-2"
+        className="w-full bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg rounded-xl py-4 shadow-[0_0_20px_rgba(255,195,0,0.3)] flex items-center justify-center gap-2 text-shadow-sm"
       >
         <ScanLine size={20} />
         锁定范围，生成美食牌库
@@ -82,20 +84,20 @@ const MatchModal = ({ matchedItem, onConfirm }) => (
       initial={{ scale: 0.7, opacity: 0, y: 100 }}
       animate={{ scale: 1, opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.1 }}
-      className="w-full max-w-sm bg-surface rounded-3xl shadow-2xl overflow-hidden"
+      className="w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden"
     >
       <div className="p-6 text-center">
-        <h2 className="text-2xl font-bold text-text-primary">🎉 匹配成功！</h2>
-        <p className="text-text-secondary mt-1">你们都馋这家！</p>
+        <h2 className="text-2xl font-bold text-gray-800">🎉 匹配成功！</h2>
+        <p className="text-gray-500 mt-1">你们都馋这家！</p>
       </div>
       <div className="relative w-full h-48">
         <img src={matchedItem.image} alt={matchedItem.name} className="w-full h-full object-cover" />
       </div>
       <div className="p-6">
-        <h3 className="text-xl font-bold text-center">{matchedItem.name}</h3>
+        <h3 className="text-xl font-bold text-center text-gray-900">{matchedItem.name}</h3>
         <button 
           onClick={onConfirm}
-          className="mt-6 w-full bg-brand-primary text-black font-bold text-lg rounded-xl py-4 shadow-lg flex items-center justify-center gap-2"
+          className="mt-6 w-full bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg rounded-xl py-4 shadow-[0_0_20px_rgba(255,195,0,0.3)] flex items-center justify-center gap-2"
         >
           查看组局神券 👉
         </button>
@@ -157,25 +159,29 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
 
   return (
     <div className="h-full w-full flex flex-col items-center bg-background">
+      <header className="absolute top-0 z-30 w-full p-4 flex items-center gap-2 bg-[#F4F5F7]/80 backdrop-blur-xl">
+        <MapPin size={20} className="text-green-500" />
+        <span className="font-bold text-gray-800">浙江大学（紫金港校区）</span>
+      </header>
       <CardStack cards={cards} onLike={(c) => handleAction(c, 'like')} onPass={() => handleAction(cards[cards.length - 1], 'pass')} onSuperLike={() => handleAction(cards[cards.length - 1], 'superlike')} />
       {isGroupMode ? (
-        <div className="absolute bottom-0 z-40 w-full h-24 bg-surface-muted p-4 flex items-center justify-center shadow-top">
+        <div className="absolute bottom-0 z-40 w-full h-28 bg-white/80 backdrop-blur-xl p-4 flex items-center justify-center shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
           <div className="flex items-center">
-            <div className="flex -space-x-3">
-              <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-sm">🐶</div>
-              <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-sm">🐱</div>
-              <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-200 flex items-center justify-center text-sm">🐼</div>
+            <div className="flex -space-x-4">
+              <span className="w-10 h-10 rounded-full border-[3px] border-white bg-gray-200 flex items-center justify-center text-lg shadow-md">🐶</span>
+              <span className="w-10 h-10 rounded-full border-[3px] border-white bg-gray-200 flex items-center justify-center text-lg shadow-md">🐱</span>
+              <span className="w-10 h-10 rounded-full border-[3px] border-white bg-gray-200 flex items-center justify-center text-lg shadow-md">🐼</span>
             </div>
-            <p className="ml-3 font-semibold text-text-secondary">正在等待室友滑动... (已选 <span className="text-text-primary font-bold">{shortlist.length}</span> 家)</p>
+            <p className="ml-4 font-semibold text-gray-600">正在等待室友滑动... (已选 <span className="text-gray-900 font-bold">{shortlist.length}</span> 家)</p>
           </div>
         </div>
       ) : (
-        <div className="absolute bottom-0 z-40 w-full h-24 bg-surface-muted p-4 flex items-center justify-between shadow-top">
-          <p className="font-semibold text-text-secondary">已将 <span className="text-text-primary font-bold">{shortlist.length}</span> 家餐厅加入备选</p>
+        <div className="absolute bottom-0 z-40 w-full h-28 bg-white/80 backdrop-blur-xl p-4 flex items-center justify-between shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+          <p className="font-semibold text-gray-500">已将 <span className="text-gray-800 font-bold">{shortlist.length}</span> 家餐厅加入备选</p>
           <button 
             onClick={() => setAppStep('SUMMARY')}
             disabled={shortlist.length === 0}
-            className="font-bold text-lg rounded-full px-6 py-3 transition-colors disabled:bg-gray-200 disabled:text-gray-400 bg-brand-primary text-black"
+            className="font-bold text-lg rounded-full px-6 py-3 transition-all disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black shadow-[0_0_20px_rgba(255,195,0,0.3)] animate-pulse-slow"
           >
             对比决策 👉
           </button>
@@ -197,46 +203,55 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
   };
 
   return (
-    <div className="h-full w-full flex flex-col bg-background">
-      <header className="flex-shrink-0 flex items-center justify-between p-4 border-b border-gray-200">
-        <button onClick={() => { setShortlist([]); setAppStep('SWIPE'); }} className="flex items-center gap-1 text-text-secondary font-medium">
-          <ArrowLeft size={18} />
+    <div className="h-full w-full flex flex-col bg-[#F5F6F8]">
+      <header className="flex-shrink-0 flex items-center justify-between p-4 bg-white border-b border-gray-100">
+        <button onClick={() => { setShortlist([]); setAppStep('SWIPE'); }} className="flex items-center gap-1 text-gray-600 font-medium">
+          <ArrowLeft size={20} />
           返回重刷
         </button>
-        <h1 className="font-bold text-lg text-text-primary">{isGroupMode ? '组局成功' : '终极对决'}</h1>
-        <div className="w-12" />
+        <h1 className="font-bold text-lg text-gray-900">{isGroupMode ? '组局成功' : '终极对决'}</h1>
+        <div className="w-16" />
       </header>
 
       {isGroupMode && shortlist.length > 0 ? (
         <main className="flex-grow p-4 overflow-y-auto">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold">🎉 终选餐厅 🎉</h2>
-            <p className="text-text-secondary">就是它！你们共同的选择！</p>
+            <h2 className="text-2xl font-bold text-gray-800">🎉 终选餐厅 🎉</h2>
+            <p className="text-gray-500">就是它！你们共同的选择！</p>
           </div>
-          <div className="bg-surface rounded-2xl shadow-lg p-4">
+          <div className="bg-white rounded-2xl shadow-lg p-4">
             <img src={shortlist[shortlist.length - 1].image} alt={shortlist[shortlist.length - 1].name} className="w-full h-40 rounded-xl object-cover" />
-            <h3 className="text-xl font-bold mt-4">{shortlist[shortlist.length - 1].name}</h3>
+            <h3 className="text-xl font-bold mt-4 text-gray-900">{shortlist[shortlist.length - 1].name}</h3>
           </div>
 
-          <div className="mt-6 bg-[#1A1A1A] rounded-2xl p-5 text-center shadow-xl">
-            <p className="text-yellow-400 font-bold text-2xl">4人同行专享</p>
-            <p className="text-white font-bold text-4xl mt-1">满100减30</p>
+          <div className="mt-6 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 to-black rounded-2xl p-5 text-center shadow-xl relative">
+            <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-[#F5F6F8] rounded-full" />
+            <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-[#F5F6F8] rounded-full" />
+            <div className="absolute left-10 right-10 top-1/2 border-t border-dashed border-gray-500" />
+            <p className="text-yellow-400 font-bold text-2xl drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">4人同行专享</p>
+            <p className="text-white font-bold text-4xl mt-1 drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">满100减30</p>
             <p className="text-yellow-500/80 text-sm mt-2">组局神券</p>
           </div>
         </main>
       ) : (
-        <main className="flex-grow p-4 overflow-y-auto space-y-2">
+        <main className="flex-grow p-4 overflow-y-auto space-y-3">
           {shortlist.map(item => (
-            <div key={item.id} className="flex items-start gap-4 p-3 rounded-xl bg-surface shadow-sm">
-              <img src={item.image} alt={item.name} className="w-20 h-20 rounded-md object-cover" />
-              <div className="flex-grow">
-                {superLikedItem?.id === item.id && (
-                  <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2, type: 'spring', stiffness: 400, damping: 15 }} className="mb-1.5 w-fit bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">🔥 极速必吃</motion.div>
-                )}
-                <p className="font-bold text-text-primary text-lg">{item.name}</p>
-                <div className="flex items-center justify-between mt-2">
-                  <p className="text-xs text-text-secondary font-medium bg-gray-100 px-2 py-0.5 rounded-full w-fit">📍 {item.locationTag}</p>
-                  <p className="font-bold text-xl text-price-highlight">¥{item.price}</p>
+            <div key={item.id} className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100/50">
+              <img src={item.image} alt={item.name} className="w-24 h-24 rounded-xl object-cover" />
+              <div className="flex-grow flex flex-col h-24">
+                <div>
+                  {superLikedItem?.id === item.id && (
+                    <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2, type: 'spring', stiffness: 400, damping: 15 }} className="mb-1.5 w-fit bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">🔥 极速必吃</motion.div>
+                  )}
+                  <p className="font-bold text-gray-900 text-lg">{item.name}</p>
+                </div>
+                <div className="flex-grow" />
+                <div className="flex items-end justify-between">
+                  <span className="bg-emerald-50 text-emerald-600 px-2 py-1 rounded-md text-xs font-medium">📍 {item.locationTag}</span>
+                  <p className="font-bold text-[#FF4A26]">
+                    <span className="text-sm">¥</span>
+                    <span className="text-xl">{item.price}</span>
+                  </p>
                 </div>
               </div>
             </div>
@@ -244,31 +259,31 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
         </main>
       )}
 
-      <footer className="flex-shrink-0 p-4 bg-white/80 backdrop-blur-xl border-t border-gray-200/80 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
+      <footer className="flex-shrink-0 p-4 bg-white/90 backdrop-blur-xl border-t border-gray-100/80 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
         {isGroupMode ? (
           <div className="flex flex-col gap-3">
-            <button onClick={handleCheckout} className="w-full bg-brand-primary text-black font-bold text-lg rounded-xl py-4 shadow-lg">
+            <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg rounded-xl py-4 shadow-[0_0_20px_rgba(255,195,0,0.3)]">
               一键召唤室友拼单
             </button>
-            <button className="w-full bg-gray-200 text-text-primary font-bold text-lg rounded-xl py-4">
+            <button className="w-full bg-gray-200 text-gray-800 font-bold text-lg rounded-xl py-4">
               查看堂食路线
             </button>
           </div>
         ) : (
           <div className="flex justify-around items-center">
-            <button onClick={handleCheckout} className="flex flex-col items-center gap-1.5 text-text-primary">
-              <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-brand-primary text-black shadow-lg">
+            <button onClick={handleCheckout} className="flex flex-col items-center gap-1.5 text-gray-800">
+              <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black shadow-lg">
                 <ArrowRight size={32} />
               </div>
-              <span className="text-xs font-semibold">极速外卖下单</span>
+              <span className="text-sm font-semibold">极速外卖下单</span>
             </button>
-            <button className="flex flex-col items-center gap-1.5 text-text-secondary">
+            <button className="flex flex-col items-center gap-1.5 text-gray-500">
               <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-gray-200">
                 <Navigation size={28} />
               </div>
               <span className="text-xs font-semibold">去堂食</span>
             </button>
-            <button className="flex flex-col items-center gap-1.5 text-text-secondary">
+            <button className="flex flex-col items-center gap-1.5 text-gray-500">
               <div className="w-14 h-14 flex items-center justify-center rounded-2xl bg-gray-200">
                 <MessageSquare size={28} />
               </div>
