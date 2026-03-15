@@ -1,18 +1,10 @@
 "use client";
 
-import { useState, FC, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Check, ChevronDown, MoveRight, MessageSquare, Navigation } from 'lucide-react';
-import type { FoodItem } from '@/lib/data';
 
-type AppStep = 'SEARCH' | 'SCANNING' | 'SWIPE' | 'SUMMARY';
-
-interface SummaryViewProps {
-  setAppStep: Dispatch<SetStateAction<AppStep>>;
-  cartItems: FoodItem[];
-}
-
-const SummaryView: FC<SummaryViewProps> = ({ setAppStep, cartItems }) => {
+const SummaryView = ({ setAppStep, cartItems }) => {
   const [selectedItems, setSelectedItems] = useState<number[]>(cartItems.map(i => i.id));
 
   const toggleItemSelection = (id: number) => {

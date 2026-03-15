@@ -1,26 +1,19 @@
 "use client";
 
-import { useState, FC, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 import CardStack from '@/components/CardStack';
 import BottomBar from '@/components/BottomBar';
-import { FOOD_ITEMS, type FoodItem } from '@/lib/data';
+import { FOOD_ITEMS } from '@/lib/data'; // We will move data to a separate file
 
-type AppStep = 'SEARCH' | 'SCANNING' | 'SWIPE' | 'SUMMARY';
+const SwipeView = ({ setAppStep, setCartItems }) => {
+  const [cards, setCards] = useState(FOOD_ITEMS);
+  const [shortlist, setShortlist] = useState<any[]>([]);
 
-interface SwipeViewProps {
-  setAppStep: Dispatch<SetStateAction<AppStep>>;
-  setCartItems: Dispatch<SetStateAction<FoodItem[]>>;
-}
-
-const SwipeView: FC<SwipeViewProps> = ({ setAppStep, setCartItems }) => {
-  const [cards, setCards] = useState<FoodItem[]>(FOOD_ITEMS);
-  const [shortlist, setShortlist] = useState<FoodItem[]>([]);
-
-  const handlePass = (card: FoodItem) => {
-    setCards(prev => prev.filter(c => c.id !== card.id));
+  const handlePass = (id: number) => {
+    setCards(prev => prev.filter(card => card.id !== id));
   };
 
-  const handleLike = (card: FoodItem) => {
+  const handleLike = (card: any) => {
     setShortlist(prev => [...prev, card]);
     setCards(prev => prev.filter(c => c.id !== card.id));
   };
