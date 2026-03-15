@@ -11,7 +11,12 @@ type AppStep = 'SEARCH' | 'SCANNING' | 'SWIPE' | 'SUMMARY';
 
 // --- VIEW COMPONENTS (defined in the same file for simplicity) ---
 
-const SearchView = ({ setAppStep, setIsGroupMode }) => {
+interface SearchViewProps {
+  setAppStep: (step: AppStep) => void;
+  setIsGroupMode: (mode: boolean) => void;
+}
+
+const SearchView = ({ setAppStep, setIsGroupMode }: SearchViewProps) => {
   const [localIsGroup, setLocalIsGroup] = useState(false);
 
   const handleStart = () => {
