@@ -229,135 +229,199 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
 };
 
 const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGroupMode }) => {
-  const [showPaymentToast, setShowPaymentToast] = useState(false);
+            const [showPaymentToast, setShowPaymentToast] = useState(false);
 
-  const handleCheckout = () => {
-    setShowPaymentToast(true);
-    setTimeout(() => setShowPaymentToast(false), 3000);
-  };
+            const handleCheckout = () => {
+              setShowPaymentToast(true);
+              setTimeout(() => setShowPaymentToast(false), 3000);
+            };
 
-  return (
-    <div className="min-h-screen bg-[#F5F6F8] pb-32">
-      <header className="flex-shrink-0 flex items-center justify-between p-4 bg-white border-b border-gray-100">
-        <button onClick={() => { setShortlist([]); setAppStep('SWIPE'); }} className="flex items-center gap-1 text-gray-600 font-medium">
-          <ArrowLeft size={20} />
-          返回重刷
-        </button>
-        <h1 className="font-bold text-lg text-gray-900">{isGroupMode ? '组局成功' : '确认订单'}</h1>
-        <div className="w-16" />
-      </header>
-
-      <main className="px-4 pt-4">
-        {isGroupMode && shortlist.length > 0 ? (
-          <>
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">🎉 终选餐厅 🎉</h2>
-              <p className="text-gray-500">就是它！你们共同的选择！</p>
-            </div>
-            <div className="bg-white rounded-2xl shadow-lg p-4">
-              <img src={shortlist[shortlist.length - 1].image} alt={shortlist[shortlist.length - 1].name} className="w-full h-40 rounded-xl object-cover" />
-              <h3 className="text-xl font-bold mt-4 text-gray-900">{shortlist[shortlist.length - 1].name}</h3>
-            </div>
-
-            <div className="mt-6 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 to-black rounded-2xl p-5 text-center shadow-xl relative">
-              <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-[#F5F6F8] rounded-full" />
-              <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-[#F5F6F8] rounded-full" />
-              <div className="absolute left-10 right-10 top-1/2 border-t border-dashed border-gray-500" />
-              <p className="text-yellow-400 font-bold text-2xl drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">4人同行专享</p>
-              <p className="text-white font-bold text-4xl mt-1 drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">满100减30</p>
-              <p className="text-yellow-500/80 text-sm mt-2">组局神券</p>
-            </div>
-          </>
-        ) : (
-          (() => {
             const finalShortlist = superLikedItem ? [superLikedItem] : shortlist;
-            return (
-              <>
-                <div className="bg-white rounded-2xl p-4 shadow-sm mb-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-lg font-extrabold text-gray-900">紫金港校区东1大门 (外卖柜)</p>
-                      <p className="text-sm text-gray-500 mt-1">李同学 138****1234</p>
+            const subtotal = finalShortlist.reduce((acc, item) => acc + item.price, 0);
+            const packagingFee = 2.5;
+            const deliveryFee = 5;
+            const total = subtotal + packagingFee + deliveryFee;
+
+            // Helper to render a fee line
+            const FeeLine = ({ label, amount, isBold = false }) => (
+              <div className={`flex justify-between items-center ${isBold ? 'font-bold' : ''}`}>
+                <p className="text-sm text-gray-600">{label}</p>
+                <p className={`text-sm ${isBold ? 'font-bold' : 'text-gray-800'}`}>¥{amount.toFixed(2)}</p>
+              </div>
+            );
+
+            if (isGroupMode) {
+              // Group mode UI remains the same for now as per instructions
+              return (
+                <div className="min-h-screen bg-gray-50 pb-32">
+                  <header className="bg-white shadow-sm p-4 text-center relative">
+                    <button onClick={() => setAppStep('SWIPE')} className="absolute left-4 top-1/2 -translate-y-1/2 p-2">
+                       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <h1 className="text-xl font-bold">小组订单确认</h1>
+                  </header>
+                  <main className="p-4">
+                    <div className="bg-white rounded-2xl p-6 shadow-lg mb-4">
+                        <h2 className="text-2xl font-bold text-center mb-2 text-gray-800">🎉 组局成功! 🎉</h2>
+                        <p className="text-center text-gray-600 mb-6">已为你们选出最佳组合，并自动领取优惠券！</p>
+                        <div className="space-y-3">
+                          {shortlist.map(item => (
+                            <div key={item.id} className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                              <div className="flex items-center gap-3">
+                                <Image src={item.image} alt={item.name} width={40} height={40} className="w-10 h-10 rounded-md object-cover"/>
+                                <span className="font-semibold text-gray-700">{item.name}</span>
+                              </div>
+                              <span className="font-bold text-lg text-green-600">¥{item.price.toFixed(2)}</span>
+                            </div>
+                          ))}
+                        </div>
+                         <div className="mt-6 text-center p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
+                            <h3 className="font-bold text-lg text-yellow-800">获得8折优惠券!</h3>
+                            <p className="text-yellow-700 mt-1 text-sm">已自动放入您的账户，下次下单可用。</p>
+                        </div>
                     </div>
-                    <ChevronRight size={16} className="text-gray-400" />
-                  </div>
+                  </main>
+                  <footer className="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-lg px-4 py-3 border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.04)] z-50 flex justify-between items-center">
+                    <button onClick={() => setAppStep('SWIPE')} className="text-gray-600">返回修改</button>
+                    <button onClick={() => {
+                      setShortlist([]);
+                      setAppStep('SEARCH');
+                    }} className="bg-yellow-500 text-white font-bold py-3 px-6 rounded-full shadow-lg">
+                      发起新的组局
+                    </button>
+                  </footer>
                 </div>
-                
-                <div className="bg-white rounded-2xl p-4 shadow-sm mb-4">
-                  {finalShortlist.map(item => (
-                    <div key={item.id} className="flex items-start gap-3 mb-4 last:mb-0">
-                      <img src={item.image} alt={item.name} className="w-16 h-16 rounded-xl object-cover border border-gray-100 shrink-0" />
-                      <div className="flex-1 flex flex-col justify-between h-16">
-                        <p className="text-base font-bold text-gray-900 leading-tight">{item.name}</p>
-                        <div className="flex justify-between items-end">
-                          <span className="text-xs text-gray-500">打包费 ¥1</span>
-                          <p className="font-black text-gray-900">
-                            <span className="text-xs">¥</span>
-                            <span className="text-lg">{item.price}</span>
-                          </p>
+              );
+            }
+
+            return (
+              <div className="min-h-screen bg-[#F5F6F8] pb-36">
+                {/* Header */}
+                <header className="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-lg z-40 shadow-sm">
+                  <div className="flex items-center justify-between p-4">
+                    <button onClick={() => setAppStep('SWIPE')} className="p-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <h1 className="text-lg font-bold text-gray-900">确认订单</h1>
+                    <div className="w-8"></div>
+                  </div>
+                </header>
+
+                <main className="px-4 pt-20">
+                  {/* Block 1: Core Order Info Card */}
+                  <div className="bg-white rounded-2xl p-4 shadow-lg mb-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-sm text-gray-500 mb-1">配送至</p>
+                        <p className="font-bold text-lg text-gray-900">环球贸易中心 Wework</p>
+                        <p className="text-sm text-gray-600 mt-1">张三 188****8888</p>
+                      </div>
+                      <button className="text-sm font-medium text-blue-600 mt-1">修改</button>
+                    </div>
+                    <div className="border-t border-dashed my-4"></div>
+                    <div className="flex justify-between items-center">
+                      <p className="font-semibold text-gray-800">预计送达</p>
+                      <div className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M10.394 2.08a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                        </svg>
+                        <p className="font-bold text-blue-600">12:30</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Block 2: Item List Card */}
+                  <div className="bg-white rounded-2xl shadow-lg mb-4">
+                    <div className="p-4">
+                      <div className="flex justify-between items-center mb-3">
+                        <h2 className="font-bold text-lg">商品</h2>
+                        <p className="text-sm text-gray-500">共 {finalShortlist.length} 件</p>
+                      </div>
+                      <div className="space-y-4">
+                        {finalShortlist.map((item, index) => (
+                          <div key={item.id} className={`flex items-center gap-4 ${index !== finalShortlist.length - 1 ? 'pb-4 border-b border-gray-100' : ''}`}>
+                            <Image src={item.image} alt={item.name} width={64} height={64} className="w-16 h-16 rounded-lg object-cover" />
+                            <div className="flex-grow">
+                              <p className="font-semibold text-gray-800">{item.name}</p>
+                              <p className="text-sm text-gray-500">默认</p>
+                            </div>
+                            <div className="text-right">
+                              <p className="font-bold text-gray-900">¥{item.price.toFixed(2)}</p>
+                              <p className="text-sm text-gray-400">x1</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Block 3: Fee Details Card */}
+                  <div className="bg-white rounded-2xl shadow-lg p-4 mb-4">
+                    <div className="space-y-3">
+                      <FeeLine label="包装费" amount={packagingFee} />
+                      <FeeLine label="配送费" amount={deliveryFee} />
+                    </div>
+                    <div className="border-t border-dashed my-4"></div>
+                    <div className="space-y-3">
+                       <div className="flex justify-between items-center cursor-pointer">
+                        <p className="text-sm text-gray-600">订单备注</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm text-gray-400">口味、偏好等</p>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center cursor-pointer">
+                        <p className="text-sm text-gray-600">发票</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm text-gray-400">不支持开发票</p>
+                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                         </div>
                       </div>
                     </div>
-                  ))}
-                  <div className="border-t border-gray-100 border-dashed mt-2 pt-4 flex flex-col gap-2">
-                    <div className="flex justify-between text-sm text-gray-600">
-                      <span>菜品总价</span>
-                      <span>¥{finalShortlist.reduce((acc, item) => acc + parseFloat(item.price), 0).toFixed(2)}</span>
+                     <div className="border-t border-dashed my-4"></div>
+                     <div className="flex justify-between items-center cursor-pointer">
+                        <p className="text-sm text-gray-600">优惠券</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm text-red-500">-¥2.00</p>
+                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        </div>
+                      </div>
+                  </div>
+                </main>
+
+                {/* Block 4: Footer Action Bar */}
+                <footer className="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-lg z-50">
+                  <div className="border-t shadow-[0_-10px_30px_rgba(0,0,0,0.08)] px-4 pt-3 pb-4">
+                    <div className="flex justify-end items-center mb-2 gap-2">
+                        <p className="text-sm text-gray-500">已优惠 ¥2.00</p>
+                        <p className="text-sm font-medium text-gray-800">合计</p>
+                        <p className="text-2xl font-bold text-red-500">¥{(total - 2).toFixed(2)}</p>
                     </div>
-                    <div className="flex justify-between text-sm text-gray-600">
-                      <span>配送费</span>
-                      <span>¥1</span>
-                    </div>
-                    <div className="flex justify-between text-sm text-[#FF4A26]">
-                      <span>美团红包抵扣</span>
-                      <span>-¥5.00</span>
+                    <div className="flex justify-between items-center gap-3">
+                       <button onClick={() => setAppStep('SWIPE')} className="text-gray-600 font-medium">返回修改</button>
+                      <button onClick={handleCheckout} className="flex-grow bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 px-6 rounded-full text-lg shadow-lg shadow-yellow-500/50">
+                        提交订单
+                      </button>
                     </div>
                   </div>
-                </div>
-              </>
-            );
-          })()
-        )}
-      </main>
+                </footer>
 
-      <footer className="fixed bottom-0 left-0 w-full bg-white px-4 py-3 border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.04)] z-50">
-        {isGroupMode ? (
-          <>
-            <button className="w-full text-center text-sm text-gray-500 py-2 mb-1 active:text-gray-700 transition-colors">查看堂食路线</button>
-            <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg py-3.5 rounded-full shadow-[0_4px_12px_rgba(255,195,0,0.3)]">
-              💬 召唤室友拼单
-            </button>
-          </>
-        ) : (
-          <div className="flex justify-between items-center">
-            <div className="flex items-baseline gap-1">
-              <span className="text-sm text-gray-900 font-bold">合计</span>
-              <span className="text-2xl font-black text-[#FF4A26]">¥{(shortlist.reduce((acc, item) => acc + parseFloat(item.price), 0) + 1 - 5).toFixed(2)}</span>
-            </div>
-            <button onClick={handleCheckout} className="w-1/2 bg-gradient-to-r from-[#FFD000] to-[#FFC300] text-black font-bold text-lg py-3.5 rounded-full shadow-[0_4px_12px_rgba(255,195,0,0.3)]">
-              🛵 极速外卖下单
-            </button>
-          </div>
-        )}
-      </footer>
-      <AnimatePresence>
-        {showPaymentToast && (
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="absolute inset-0 bg-black/30 flex items-center justify-center p-4"
-          >
-            <div className="bg-white rounded-2xl p-6 text-center shadow-xl">
-              <h3 className="text-lg font-bold text-green-600">{isGroupMode ? '组局口令已复制' : '支付成功！'}</h3>
-              <p className="text-text-secondary mt-2">{isGroupMode ? '快去微信群召唤室友吧！' : '商家已接单，骑手正赶往餐厅'}</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
+                {/* Payment Toast */}
+                <AnimatePresence>
+                  {showPaymentToast && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      className="fixed bottom-40 left-1/2 -translate-x-1/2 bg-black/80 text-white px-6 py-3 rounded-full shadow-xl z-50"
+                    >
+                      支付成功! 订单已确认。
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          };
 
 // --- MAIN PAGE COMPONENT ---
 

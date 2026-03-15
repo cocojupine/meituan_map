@@ -100,27 +100,37 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initial
           />
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
-      <div className="relative h-[35%] bg-surface p-3 flex flex-col">
-        <div className="flex justify-between items-start">
-          <h2 className="text-xl font-bold truncate pr-2">{card.name}</h2>
-          <p className="font-black text-[#FF4A26]">
-            <span className="text-xs">¥</span>
-            <span className="text-2xl">{card.price}</span>
+      <div className="relative h-[35%] bg-white p-4 flex flex-col rounded-b-[24px]">
+        {/* 1. Title & Price */}
+        <div className="flex justify-between items-baseline">
+          <h2 className="text-xl font-extrabold text-gray-900 line-clamp-1 flex-1 pr-2">{card.name}</h2>
+          <p className="flex-shrink-0">
+            <span className="text-xs font-bold text-[#FF4A26] align-baseline">¥</span>
+            <span className="text-2xl font-black text-[#FF4A26]">{card.price}</span>
           </p>
         </div>
-        <div className="flex items-center text-[11px] text-gray-500 gap-2 mt-1">
-          <span>⭐️ <span className="text-orange-500 font-bold">{card.rating}</span> 分</span>
-          <span>{card.sales}</span>
+
+        {/* 2. Core Business Data */}
+        <div className="flex items-center text-xs text-gray-500 gap-2 font-medium mt-1">
+          <span className="text-[#FF8000] font-bold">{card.rating}</span>
+          <span>月售{card.sales}</span>
+          <span className="mx-1">|</span>
           <span>{card.deliveryTime}</span>
         </div>
-        <div className="flex items-center gap-2 mt-2">
-          <span className="bg-red-50 text-red-500 px-1.5 py-0.5 rounded text-[10px] font-medium">30减15</span>
-          <span className="bg-red-50 text-red-500 px-1.5 py-0.5 rounded text-[10px] font-medium">新客专享</span>
-          <span className="text-xs text-gray-400">{card.deliveryFee}</span>
+
+        {/* 3. Welfare & Space Tags */}
+        <div className="flex items-center gap-2 mt-2 flex-wrap">
+          <span className="bg-emerald-50 text-emerald-600 px-1.5 py-0.5 rounded text-[10px] font-bold">距您步行5分钟</span>
+          <span className="bg-red-50 text-red-500 px-1.5 py-0.5 rounded text-[10px] font-bold">20减10</span>
+          <span className="bg-yellow-50 text-yellow-700 px-1.5 py-0.5 rounded text-[10px] font-bold">免配送费</span>
         </div>
-        <div className="flex-grow" />
-        <div className="bg-gray-50 rounded-lg p-2 mt-3">
-          <p className="text-xs text-gray-600 line-clamp-2">“{card.review}”</p>
+
+        {/* 4. Featured Review Bubble */}
+        <div className="mt-auto pt-2">
+            <div className="bg-[#F8F9FA] rounded-xl p-3 flex items-start gap-1.5">
+                <span className="text-gray-400 font-serif text-lg leading-none mt-0.5">“</span>
+                <p className="text-xs text-gray-600 line-clamp-2 flex-1">{card.review}</p>
+            </div>
         </div>
       </div>
     </motion.div>
