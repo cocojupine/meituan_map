@@ -21,17 +21,22 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike }) => {
   const controls = useAnimation();
 
   useEffect(() => {
-    if (isTop && !hasInteracted) {
-      const sequence = async () => {
+    const sequence = async () => {
+      if (isTop && !hasInteracted) {
         await new Promise(resolve => setTimeout(resolve, 1500));
-        await controls.start({
-          x: [0, 20, -20, 0],
-          rotate: [0, 5, -5, 0],
-          transition: { duration: 1, ease: "easeInOut", times: [0, 0.3, 0.6, 1] }
-        });
-      };
-      sequence();
-    }
+        // Check if component is still mounted before starting animation
+        if (controls) {
+          await controls.start({
+            x: [0, 20, -20, 0],
+            rotate: [0, 5, -5, 0],
+            transition: { duration: 1, ease: "easeInOut", times: [0, 0.3, 0.6, 1] }
+          });
+        }
+      }
+    };
+
+    sequence();
+
   }, [isTop, hasInteracted, controls]);
 
   const handlePanStart = () => {
