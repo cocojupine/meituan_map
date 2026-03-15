@@ -44,7 +44,7 @@ interface MatchModalProps {
 
 // --- VIEW COMPONENTS ---
 
-const SearchView: FC<SearchViewProps> = ({ setAppStep, setIsGroupMode }) => {
+const SearchView: FC<SearchViewProps> = ({ setAppStep, setIsGroupMode }: SearchViewProps) => {
   const [localIsGroup, setLocalIsGroup] = useState(false);
 
   const handleStart = () => {
