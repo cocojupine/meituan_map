@@ -42,10 +42,7 @@ export default function Home() {
       {/* 4. Match 弹窗 (初始隐藏) */}
       <MatchModal isOpen={showMatchModal} onClose={() => setShowMatchModal(false)} />
 
-      {/* 临时触发器，用于预览弹窗 */}
-      <button onClick={() => setShowMatchModal(true)} className='absolute bottom-36 z-50 bg-blue-500 text-white p-2 rounded-full'>
-        Test Match Modal
-      </button>
+
     </div>
   );
 }

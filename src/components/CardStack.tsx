@@ -37,6 +37,8 @@ const CardStack = () => {
               <SwipeCard
                 card={card}
                 isTop={isTop}
+                initialY={1 - (cards.length - 1 - index) * 12}
+                initialScale={1 - (cards.length - 1 - index) * 0.05}
                 onRemove={handleRemove}
               />
             </motion.div>

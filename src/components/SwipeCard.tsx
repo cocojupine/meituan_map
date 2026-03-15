@@ -15,10 +15,14 @@ interface SwipeCardProps {
   card: CardProps;
   isTop: boolean;
   onRemove: (id: number, action: 'like' | 'skip') => void;
+  initialY?: number;
+  initialScale?: number;
 }
 
-const SwipeCard = ({ card, isTop, onRemove }: SwipeCardProps) => {
+const SwipeCard = ({ card, isTop, onRemove, initialY, initialScale }: SwipeCardProps) => {
   const x = useMotionValue(0);
+  const y = useMotionValue(initialY || 0);
+  const scale = useMotionValue(initialScale || 1);
 
   const rotate = useTransform(x, [-200, 200], [-12, 12]);
   const likeOpacity = useTransform(x, [20, 80], [0, 1]);
@@ -37,7 +41,7 @@ const SwipeCard = ({ card, isTop, onRemove }: SwipeCardProps) => {
   return (
     <motion.div
       className={`absolute w-full h-full rounded-3xl overflow-hidden bg-surface shadow-card-main ${isTop ? 'cursor-grab' : ''}`}
-      style={{ x, rotate }}
+      style={{ x, y, rotate, scale }}
       drag={isTop ? "x" : false}
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={handleDragEnd}
