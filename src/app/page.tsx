@@ -27,7 +27,10 @@ const SearchView = ({ setAppStep, setIsGroupMode }) => {
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className="w-full max-w-sm bg-white/5 backdrop-blur-2xl rounded-3xl p-6 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-white"
     >
-      <h2 className="text-2xl font-bold tracking-tight text-center">今天在紫金港怎么吃？</h2>
+      <div className="text-center mb-6">
+        <p className="text-xs text-gray-400">☁️ 阴天，适合在寝室点外卖</p>
+        <h2 className="text-2xl font-bold tracking-tight text-white mt-1">今天在紫金港怎么吃？</h2>
+      </div>
       <div className="flex items-center bg-black/20 p-1 rounded-full my-6">
         <button 
           onClick={() => setLocalIsGroup(false)}
@@ -49,6 +52,12 @@ const SearchView = ({ setAppStep, setIsGroupMode }) => {
         <ScanLine size={20} />
         锁定范围，生成美食牌库
       </button>
+      <div className="text-center mt-4">
+        <p className="text-xs text-gray-500">🔥 当前紫金港有 1,204 名同学正在发牌</p>
+      </div>
+      <div className="text-center mt-6">
+        <p className="text-xs text-gray-500">最近常点: <span className="font-semibold text-gray-400">隆江猪脚饭、塔斯汀...</span></p>
+      </div>
     </motion.div>
   </div>
   );
@@ -209,55 +218,75 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
           <ArrowLeft size={20} />
           返回重刷
         </button>
-        <h1 className="font-bold text-lg text-gray-900">{isGroupMode ? '组局成功' : '终极对决'}</h1>
+        <h1 className="font-bold text-lg text-gray-900">{isGroupMode ? '组局成功' : '确认订单'}</h1>
         <div className="w-16" />
       </header>
 
-      {isGroupMode && shortlist.length > 0 ? (
-        <main className="flex-grow p-4 overflow-y-auto">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">🎉 终选餐厅 🎉</h2>
-            <p className="text-gray-500">就是它！你们共同的选择！</p>
-          </div>
-          <div className="bg-white rounded-2xl shadow-lg p-4">
-            <img src={shortlist[shortlist.length - 1].image} alt={shortlist[shortlist.length - 1].name} className="w-full h-40 rounded-xl object-cover" />
-            <h3 className="text-xl font-bold mt-4 text-gray-900">{shortlist[shortlist.length - 1].name}</h3>
-          </div>
+      <main className="flex-grow p-4 overflow-y-auto">
+        {isGroupMode && shortlist.length > 0 ? (
+          <>
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">🎉 终选餐厅 🎉</h2>
+              <p className="text-gray-500">就是它！你们共同的选择！</p>
+            </div>
+            <div className="bg-white rounded-2xl shadow-lg p-4">
+              <img src={shortlist[shortlist.length - 1].image} alt={shortlist[shortlist.length - 1].name} className="w-full h-40 rounded-xl object-cover" />
+              <h3 className="text-xl font-bold mt-4 text-gray-900">{shortlist[shortlist.length - 1].name}</h3>
+            </div>
 
-          <div className="mt-6 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 to-black rounded-2xl p-5 text-center shadow-xl relative">
-            <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-[#F5F6F8] rounded-full" />
-            <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-[#F5F6F8] rounded-full" />
-            <div className="absolute left-10 right-10 top-1/2 border-t border-dashed border-gray-500" />
-            <p className="text-yellow-400 font-bold text-2xl drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">4人同行专享</p>
-            <p className="text-white font-bold text-4xl mt-1 drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">满100减30</p>
-            <p className="text-yellow-500/80 text-sm mt-2">组局神券</p>
-          </div>
-        </main>
-      ) : (
-        <main className="flex-grow p-4 overflow-y-auto space-y-3">
-          {shortlist.map(item => (
-            <div key={item.id} className="flex items-start gap-4 p-4 rounded-2xl bg-white shadow-sm border border-gray-100/50">
-              <img src={item.image} alt={item.name} className="w-24 h-24 rounded-xl object-cover" />
-              <div className="flex-grow flex flex-col h-24">
-                <div>
-                  {superLikedItem?.id === item.id && (
-                    <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.2, type: 'spring', stiffness: 400, damping: 15 }} className="mb-1.5 w-fit bg-gradient-to-r from-red-500 to-orange-400 text-white px-2 py-0.5 rounded-full text-xs font-bold flex items-center gap-1">🔥 极速必吃</motion.div>
-                  )}
-                  <p className="font-bold text-gray-900 text-lg">{item.name}</p>
-                </div>
-                <div className="flex-grow" />
-                <div className="flex items-end justify-between">
-                  <span className="bg-emerald-50 text-emerald-600 px-2 py-1 rounded-md text-xs font-medium">📍 {item.locationTag}</span>
-                  <p className="font-bold text-[#FF4A26]">
-                    <span className="text-sm">¥</span>
-                    <span className="text-xl">{item.price}</span>
-                  </p>
+            <div className="mt-6 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 to-black rounded-2xl p-5 text-center shadow-xl relative">
+              <div className="absolute top-1/2 -translate-y-1/2 -left-4 w-8 h-8 bg-[#F5F6F8] rounded-full" />
+              <div className="absolute top-1/2 -translate-y-1/2 -right-4 w-8 h-8 bg-[#F5F6F8] rounded-full" />
+              <div className="absolute left-10 right-10 top-1/2 border-t border-dashed border-gray-500" />
+              <p className="text-yellow-400 font-bold text-2xl drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">4人同行专享</p>
+              <p className="text-white font-bold text-4xl mt-1 drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">满100减30</p>
+              <p className="text-yellow-500/80 text-sm mt-2">组局神券</p>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100/50 mb-4">
+              <div className="flex items-start gap-3">
+                <MapPin size={24} className="text-green-500 mt-1 flex-shrink-0" />
+                <div className="flex-grow">
+                  <p className="font-bold text-gray-800">紫金港校区东1大门 (外卖柜)</p>
+                  <p className="text-sm text-gray-500 mt-1">李同学 <span className="ml-2">138****1234</span></p>
                 </div>
               </div>
             </div>
-          ))}
-        </main>
-      )}
+            <div className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100/50">
+              {shortlist.map(item => (
+                <div key={item.id} className="flex items-start gap-4 py-3 border-b border-gray-100 last:border-b-0">
+                  <img src={item.image} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
+                  <div className="flex-grow">
+                    <p className="font-bold text-gray-800">{item.name}</p>
+                    <p className="text-xs text-gray-400 mt-1">打包费 ¥1</p>
+                  </div>
+                  <p className="font-bold text-gray-800">¥{item.price}</p>
+                </div>
+              ))}
+              <div className="mt-4 space-y-2 text-sm">
+                <div className="flex justify-between text-gray-600">
+                  <span>菜品总价</span>
+                  <span>¥{shortlist.reduce((acc, item) => acc + parseFloat(item.price), 0).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>配送费</span>
+                  <span>¥1</span>
+                </div>
+                <div className="flex justify-between text-red-500 font-medium">
+                  <span>美团红包抵扣</span>
+                  <span>-¥5.00</span>
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-100 text-right">
+                <span className="text-gray-600">合计 </span>
+                <span className="font-bold text-xl text-red-500">¥{(shortlist.reduce((acc, item) => acc + parseFloat(item.price), 0) + 1 - 5).toFixed(2)}</span>
+              </div>
+            </div>
+          </>
+        )}
+      </main>
 
       <footer className="flex-shrink-0 p-4 bg-white/90 backdrop-blur-xl border-t border-gray-100/80 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
         {isGroupMode ? (

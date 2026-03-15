@@ -99,19 +99,30 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initial
             priority={isTop}
           />
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute bottom-2 left-3 right-3 flex items-end justify-between">
+          <div className="text-white">
+            <h2 className="text-2xl font-bold text-shadow-lg">{card.name}</h2>
+          </div>
+          <p className="text-white font-bold text-shadow-lg">
+            <span className="text-lg">¥</span>
+            <span className="text-3xl">{card.price}</span>
+          </p>
+        </div>
       </div>
-      <div className="relative h-[35%] bg-surface p-4 flex flex-col">
-        <h2 className="text-2xl font-bold text-text-primary tracking-tight">{card.name}</h2>
+      <div className="relative h-[35%] bg-surface p-3 flex flex-col">
+        <div className="flex items-center text-xs text-gray-500 gap-2">
+          <span>⭐️ {card.rating} 分</span>
+          <span>{card.sales}</span>
+          <span>{card.deliveryTime}</span>
+        </div>
         <div className="flex items-center gap-2 mt-2">
-          {card.tags.map(tag => (
-            <span key={tag} className="bg-[#FFF6E5] text-[#FF8C00] px-2 py-1 rounded-md text-xs font-medium">{tag}</span>
-          ))}
+          <span className="bg-red-50 text-red-500 px-2 py-0.5 rounded-md text-xs font-medium">20减10</span>
+          <span className="bg-yellow-50 text-yellow-600 px-2 py-0.5 rounded-md text-xs font-medium">极速退</span>
+          <span className="text-xs text-gray-400">{card.deliveryFee}</span>
         </div>
         <div className="flex-grow" />
-        <div className="flex justify-end items-end">
-          <p className="text-price-highlight text-4xl font-bold">
-            <span className="text-2xl">¥</span>{card.price}
-          </p>
+        <div className="bg-gray-50 p-2 rounded-lg mt-2">
+          <p className="text-xs text-gray-600 truncate">“{card.review}”</p>
         </div>
       </div>
     </motion.div>
