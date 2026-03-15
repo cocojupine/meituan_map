@@ -11,15 +11,7 @@ interface CardProps {
   tags: string[];
 }
 
-interface SwipeCardProps {
-  card: CardProps;
-  isTop: boolean;
-  onRemove: (id: number, action: 'like' | 'skip') => void;
-  initialY?: number;
-  initialScale?: number;
-}
-
-const SwipeCard = ({ card, isTop, onRemove, initialY, initialScale }: SwipeCardProps) => {
+const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initialScale }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(initialY || 0);
   const scale = useMotionValue(initialScale || 1);
@@ -29,12 +21,16 @@ const SwipeCard = ({ card, isTop, onRemove, initialY, initialScale }: SwipeCardP
   const likeScale = useTransform(x, [20, 80], [0.5, 1]);
   const skipOpacity = useTransform(x, [-80, -20], [1, 0]);
   const skipScale = useTransform(x, [-80, -20], [1, 0.5]);
+  const superlikeOpacity = useTransform(y, [-80, -20], [1, 0]);
+  const superlikeScale = useTransform(y, [-80, -20], [1, 0.5]);
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.x > 100) {
-      onRemove(card.id, 'like');
+      onLike();
     } else if (info.offset.x < -100) {
-      onRemove(card.id, 'skip');
+      onPass();
+    } else if (info.offset.y < -100) {
+      onSuperLike();
     }
   };
 
@@ -42,10 +38,10 @@ const SwipeCard = ({ card, isTop, onRemove, initialY, initialScale }: SwipeCardP
     <motion.div
       className={`absolute w-full h-full rounded-3xl overflow-hidden bg-surface shadow-card-main ${isTop ? 'cursor-grab' : ''}`}
       style={{ x, y, rotate, scale }}
-      drag={isTop ? "x" : false}
-      dragConstraints={{ left: 0, right: 0 }}
+      drag={isTop}
+      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       onDragEnd={handleDragEnd}
-      dragElastic={0.7}
+      dragElastic={{ top: 0.5, left: 0.7, right: 0.7, bottom: 0.5 }}
     >
       {/* 1. 上半层 (Image) */}
       <div className="relative h-[65%] w-full">
