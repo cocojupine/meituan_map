@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction, FC } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { MapPin, ScanLine, User, Users } from 'lucide-react';
@@ -10,12 +10,52 @@ import { FOOD_ITEMS } from '@/lib/data';
 // --- TYPE DEFINITIONS ---
 type AppStep = 'SEARCH' | 'SCANNING' | 'SWIPE' | 'SUMMARY';
 
+interface FoodItem {
+  id: number;
+  name: string;
+  price: string;
+  image: string;
+  tags: string[];
+  rating: number;
+  sales: number;
+  description: string;
+}
+
+// --- PROPS INTERFACES ---
+interface ViewProps {
+  setAppStep: Dispatch<SetStateAction<AppStep>>;
+}
+
+interface SearchViewProps extends ViewProps {
+  setIsGroupMode: Dispatch<SetStateAction<boolean>>;
+}
+
+interface SwipeViewProps extends ViewProps {
+  cards: FoodItem[];
+  setCards: Dispatch<SetStateAction<FoodItem[]>>;
+  shortlist: FoodItem[];
+  setShortlist: Dispatch<SetStateAction<FoodItem[]>>;
+  setSuperLikedItem: Dispatch<SetStateAction<FoodItem | null>>;
+  isGroupMode: boolean;
+  onToggleMode: () => void;
+}
+
+interface SummaryViewProps extends ViewProps {
+  shortlist: FoodItem[];
+  setShortlist: Dispatch<SetStateAction<FoodItem[]>>;
+  superLikedItem: FoodItem | null;
+  isGroupMode: boolean;
+}
+
+interface MatchModalProps {
+  matchedItem: FoodItem;
+  onConfirm: () => void;
+}
+
+
 // --- VIEW COMPONENTS ---
 
-// Each view is now a self-contained unit responsible for its own content and internal layout,
-// but not the outer "phone" shell. They are designed to fill the parent container.
-
-const SearchView = ({ setAppStep, setIsGroupMode }) => {
+const SearchView: FC<SearchViewProps> = ({ setAppStep, setIsGroupMode }) => {
   const [localIsGroup, setLocalIsGroup] = useState(false);
 
   const handleStart = () => {
@@ -64,7 +104,7 @@ const SearchView = ({ setAppStep, setIsGroupMode }) => {
   );
 };
 
-const ScanningView = ({ setAppStep }) => {
+const ScanningView: FC<ViewProps> = ({ setAppStep }) => {
   useEffect(() => {
     const timer = setTimeout(() => setAppStep('SWIPE'), 2500);
     return () => clearTimeout(timer);
@@ -82,7 +122,7 @@ const ScanningView = ({ setAppStep }) => {
   );
 };
 
-const MatchModal = ({ matchedItem, onConfirm }) => (
+const MatchModal: FC<MatchModalProps> = ({ matchedItem, onConfirm }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -115,7 +155,7 @@ const MatchModal = ({ matchedItem, onConfirm }) => (
   </motion.div>
 );
 
-const SwipeView = ({ setAppStep, cards, setCards, shortlist, setShortlist, setSuperLikedItem, isGroupMode, onToggleMode }) => {
+const SwipeView: FC<SwipeViewProps> = ({ setAppStep, cards, setCards, shortlist, setShortlist, setSuperLikedItem, isGroupMode, onToggleMode }) => {
   const [showMatchModal, setShowMatchModal] = useState(false);
 
   useEffect(() => {
@@ -129,11 +169,9 @@ const SwipeView = ({ setAppStep, cards, setCards, shortlist, setShortlist, setSu
     setAppStep('SUMMARY');
   };
 
-  const handleAction = (card, action) => {
+  const handleAction = (card: FoodItem, action: 'like' | 'pass' | 'superlike') => {
     if (!card) return;
 
-    // For like, pass, and superlike, the card is removed from the stack.
-    // For superlike, we navigate away, so the visual removal is implicit.
     if (action !== 'superlike') {
       setCards(prev => prev.filter(c => c.id !== card.id));
     }
@@ -145,7 +183,6 @@ const SwipeView = ({ setAppStep, cards, setCards, shortlist, setShortlist, setSu
       setSuperLikedItem(card);
       setAppStep('SUMMARY');
     }
-    // For 'pass', we only remove the card, which is already done.
   };
   
   if (cards.length === 0 && !showMatchModal) {
@@ -216,13 +253,13 @@ const SwipeView = ({ setAppStep, cards, setCards, shortlist, setShortlist, setSu
       </footer>
 
       <AnimatePresence>
-        {showMatchModal && <MatchModal matchedItem={shortlist[2]} onConfirm={handleConfirmMatch} />}
+        {showMatchModal && shortlist.length >= 3 && <MatchModal matchedItem={shortlist[2]} onConfirm={handleConfirmMatch} />}
       </AnimatePresence>
     </div>
   );
 };
 
-const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGroupMode }) => {
+const SummaryView: FC<SummaryViewProps> = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGroupMode }) => {
     const [showPaymentToast, setShowPaymentToast] = useState(false);
 
     const handleCheckout = () => {
@@ -236,7 +273,7 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
     const deliveryFee = 5;
     const total = subtotal + packagingFee + deliveryFee;
 
-    const FeeLine = ({ label, amount, isBold = false }) => (
+    const FeeLine = ({ label, amount, isBold = false }: { label: string; amount: number; isBold?: boolean }) => (
       <div className={`flex justify-between items-center ${isBold ? 'font-bold' : ''}`}>
         <p className="text-sm text-gray-600">{label}</p>
         <p className={`text-sm ${isBold ? 'font-bold' : 'text-gray-800'}`}>¥{amount.toFixed(2)}</p>
@@ -411,10 +448,10 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
 
 export default function Home() {
   const [appStep, setAppStep] = useState<AppStep>('SEARCH');
-  const [shortlist, setShortlist] = useState<any[]>([]);
-  const [superLikedItem, setSuperLikedItem] = useState<any | null>(null);
+  const [shortlist, setShortlist] = useState<FoodItem[]>([]);
+  const [superLikedItem, setSuperLikedItem] = useState<FoodItem | null>(null);
   const [isGroupMode, setIsGroupMode] = useState(false);
-  const [cards, setCards] = useState(FOOD_ITEMS);
+  const [cards, setCards] = useState<FoodItem[]>(FOOD_ITEMS);
 
   const handleToggleMode = () => {
     setIsGroupMode(prev => !prev);
