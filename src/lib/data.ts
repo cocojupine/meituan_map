@@ -1,4 +1,18 @@
-export const FOOD_ITEMS = [
+export interface FoodItem {
+  id: number;
+  name: string;
+  price: string;
+  image: string;
+  tags: string[];
+  locationTag: string;
+  rating: number;
+  sales: string;
+  deliveryTime: string;
+  deliveryFee: string;
+  review: string;
+}
+
+export const FOOD_ITEMS: FoodItem[] = [
   { 
     id: 5, 
     name: '塔斯汀中国汉堡', 

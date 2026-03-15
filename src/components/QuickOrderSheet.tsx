@@ -1,8 +1,14 @@
 "use client";
 
 import { AnimatePresence, motion } from 'framer-motion';
+import { FC } from 'react';
 
-const QuickOrderSheet = ({ isOpen, onClose }) => {
+interface QuickOrderSheetProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const QuickOrderSheet: FC<QuickOrderSheetProps> = ({ isOpen, onClose }) => {
   return (
     <AnimatePresence>
       {isOpen && (

@@ -5,21 +5,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { MapPin, ScanLine, User, Users } from 'lucide-react';
 import CardStack from '@/components/CardStack';
-import { FOOD_ITEMS } from '@/lib/data';
+import { FOOD_ITEMS, type FoodItem } from '@/lib/data';
 
 // --- TYPE DEFINITIONS ---
 type AppStep = 'SEARCH' | 'SCANNING' | 'SWIPE' | 'SUMMARY';
-
-interface FoodItem {
-  id: number;
-  name: string;
-  price: string;
-  image: string;
-  tags: string[];
-  rating: number;
-  sales: number;
-  description: string;
-}
 
 // --- PROPS INTERFACES ---
 interface ViewProps {

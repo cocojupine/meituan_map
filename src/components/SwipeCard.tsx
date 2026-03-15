@@ -1,19 +1,20 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, FC } from 'react';
 import { PanInfo, motion, useMotionValue, useTransform, AnimatePresence, useAnimation } from "framer-motion";
 import Image from "next/image";
 import { X, Heart } from 'lucide-react';
+import { FoodItem } from '@/lib/data';
 
-interface CardProps {
-  id: number;
-  name: string;
-  price: string;
-  image: string;
-  tags: string[];
+interface SwipeCardProps {
+  card: FoodItem;
+  isTop: boolean;
+  onLike: () => void;
+  onPass: () => void;
+  onSuperLike: () => void;
 }
 
-const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike }) => {
+const SwipeCard: FC<SwipeCardProps> = ({ card, isTop, onLike, onPass, onSuperLike }) => {
   const [hasInteracted, setHasInteracted] = useState(false);
   const isMounted = useRef(true);
   const x = useMotionValue(0);

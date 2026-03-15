@@ -2,23 +2,14 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import SwipeCard from './SwipeCard';
-
-// 1. 定义卡片数据类型 (根据报错日志补充了 tags 和 locationTag)
-export interface CardData {
-  id: number;
-  name: string;
-  price: string;
-  image: string;
-  tags: string[];
-  locationTag?: string; // 如果有的卡片没有标签，可以加上 ? 设为可选
-}
+import type { FoodItem } from '@/lib/data';
 
 // 2. 严格定义 page.tsx 传过来的 Props
 interface CardStackProps {
-  cards: CardData[];
-  onPass: (card: CardData) => void;
-  onLike: (card: CardData) => void;
-  onSuperLike: (card: CardData) => void;
+  cards: FoodItem[];
+  onPass: (card: FoodItem) => void;
+  onLike: (card: FoodItem) => void;
+  onSuperLike: (card: FoodItem) => void;
 }
 
 // 3. 将组件改为接收外部 Props，不再自己使用 useState
