@@ -71,9 +71,6 @@ const SwipeCard = ({ card, isTop, onRemove, initialY, initialScale }: SwipeCardP
             priority={isTop}
           />
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
-        <div className="absolute bottom-3 left-4 text-white text-sm font-medium">
-          距您 300m / 预计 15分钟送达
-        </div>
       </div>
 
       {/* 2. 下半层 (Info) */}
