@@ -13,7 +13,17 @@ interface CardProps {
   tags: string[];
 }
 
-const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initialScale }) => {
+interface SwipeCardProps {
+  card: CardProps;
+  isTop: boolean;
+  onLike: () => void;
+  onPass: () => void;
+  onSuperLike: () => void;
+  initialY: number;
+  initialScale: number;
+}
+
+const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initialScale }: SwipeCardProps) => {
   const [hasInteracted, setHasInteracted] = useState(false);
   const x = useMotionValue(0);
   const y = useMotionValue(initialY || 0);

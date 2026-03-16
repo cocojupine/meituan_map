@@ -2,7 +2,12 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 
-const QuickOrderSheet = ({ isOpen, onClose }) => {
+interface QuickOrderSheetProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const QuickOrderSheet = ({ isOpen, onClose }: QuickOrderSheetProps) => {
   return (
     <AnimatePresence>
       {isOpen && (

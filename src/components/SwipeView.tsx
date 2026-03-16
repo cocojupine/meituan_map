@@ -5,7 +5,12 @@ import CardStack from '@/components/CardStack';
 import BottomBar from '@/components/BottomBar';
 import { FOOD_ITEMS } from '@/lib/data'; // We will move data to a separate file
 
-const SwipeView = ({ setAppStep, setCartItems }) => {
+interface SwipeViewProps {
+  setAppStep: (step: string) => void;
+  setCartItems: (items: any[]) => void;
+}
+
+const SwipeView = ({ setAppStep, setCartItems }: SwipeViewProps) => {
   const [cards, setCards] = useState(FOOD_ITEMS);
   const [shortlist, setShortlist] = useState<any[]>([]);
 

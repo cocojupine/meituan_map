@@ -1,12 +1,16 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ScanLine } from 'lucide-react';
 
-const RadarScanner = ({ onScanComplete }) => {
+interface RadarScannerProps {
+  onScanComplete: () => void;
+}
+
+const RadarScanner = ({ onScanComplete }: RadarScannerProps) => {
   // This component will just show the animation and then trigger completion
-  useState(() => {
+  useEffect(() => {
     const timer = setTimeout(onScanComplete, 2000);
     return () => clearTimeout(timer);
   }, [onScanComplete]);
@@ -23,7 +27,11 @@ const RadarScanner = ({ onScanComplete }) => {
   );
 };
 
-const SearchView = ({ setAppStep }) => {
+interface SearchViewProps {
+  setAppStep: (step: string) => void;
+}
+
+const SearchView = ({ setAppStep }: SearchViewProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('单人速食');
 

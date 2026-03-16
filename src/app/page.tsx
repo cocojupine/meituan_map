@@ -1,19 +1,30 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MapPin, ScanLine, ArrowRight, Navigation, MessageSquare, ArrowLeft } from 'lucide-react';
-import CardStack from '@/components/CardStack'; // Assuming this is our well-designed card stack
-import { FOOD_ITEMS } from '@/lib/data'; // Assuming data is here
+import CardStack from '@/components/CardStack';
+import { FOOD_ITEMS } from '@/lib/data';
 
 // --- TYPE DEFINITIONS ---
 type AppStep = 'SEARCH' | 'SCANNING' | 'SWIPE' | 'SUMMARY';
 
-// --- VIEW COMPONENTS (defined in the same file for simplicity) ---
+// This interface must match the structure of objects in lib/data.ts
+interface FoodItem {
+  id: number; // Corrected to number
+  name: string;
+  price: string; // Corrected to string
+  image: string;
+  locationTag: string;
+  tags: string[];
+}
+
+// --- VIEW COMPONENTS ---
 
 interface SearchViewProps {
-  setAppStep: (step: AppStep) => void;
-  setIsGroupMode: (mode: boolean) => void;
+  setAppStep: Dispatch<SetStateAction<AppStep>>;
+  setIsGroupMode: Dispatch<SetStateAction<boolean>>;
 }
 
 const SearchView = ({ setAppStep, setIsGroupMode }: SearchViewProps) => {
@@ -25,39 +36,43 @@ const SearchView = ({ setAppStep, setIsGroupMode }: SearchViewProps) => {
   };
 
   return (
-  <div className="w-full h-full flex items-center justify-center bg-[#1A1A1A] p-4" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(40, 40, 40, 0) 0%, #1A1A1A 70%), linear-gradient(-45deg, rgba(30,30,30,0.8) 25%, transparent 25%, transparent 50%, rgba(30,30,30,0.8) 50%, rgba(30,30,30,0.8) 75%, transparent 75%, transparent)', backgroundSize: '100% 100%, 10px 10px' }}>
-    <motion.div 
-      initial={{ y: 20, opacity: 0 }} 
-      animate={{ y: 0, opacity: 1 }} 
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="w-full max-w-sm bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-glass text-white"
-    >
-      <h2 className="text-2xl font-bold tracking-tight">今天在紫金港怎么吃？</h2>
-      <div className="flex items-center gap-2 bg-black/20 p-1 rounded-full my-6">
-        <button 
-          onClick={() => setLocalIsGroup(false)}
-          className={`w-full text-sm font-semibold py-2 rounded-full transition-colors ${!localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
-          单人快速凑单
-        </button>
-        <button 
-          onClick={() => setLocalIsGroup(true)}
-          className={`w-full text-sm font-semibold py-2 rounded-full transition-colors ${localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
-          宿舍组局发牌
-        </button>
-      </div>
-      <button 
-        onClick={handleStart}
-        className="w-full bg-brand-primary text-black font-bold text-lg rounded-xl py-4 shadow-lg flex items-center justify-center gap-2"
+    <div className="w-full h-full flex items-center justify-center bg-[#1A1A1A] p-4" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(40, 40, 40, 0) 0%, #1A1A1A 70%), linear-gradient(-45deg, rgba(30,30,30,0.8) 25%, transparent 25%, transparent 50%, rgba(30,30,30,0.8) 50%, rgba(30,30,30,0.8) 75%, transparent 75%, transparent)', backgroundSize: '100% 100%, 10px 10px' }}>
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }} 
+        animate={{ y: 0, opacity: 1 }} 
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="w-full max-w-sm bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-glass text-white"
       >
-        <ScanLine size={20} />
-        锁定范围，生成美食牌库
-      </button>
-    </motion.div>
-  </div>
+        <h2 className="text-2xl font-bold tracking-tight">今天在紫金港怎么吃？</h2>
+        <div className="flex items-center gap-2 bg-black/20 p-1 rounded-full my-6">
+          <button 
+            onClick={() => setLocalIsGroup(false)}
+            className={`w-full text-sm font-semibold py-2 rounded-full transition-colors ${!localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
+            单人快速凑单
+          </button>
+          <button 
+            onClick={() => setLocalIsGroup(true)}
+            className={`w-full text-sm font-semibold py-2 rounded-full transition-colors ${localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
+            宿舍组局发牌
+          </button>
+        </div>
+        <button 
+          onClick={handleStart}
+          className="w-full bg-brand-primary text-black font-bold text-lg rounded-xl py-4 shadow-lg flex items-center justify-center gap-2"
+        >
+          <ScanLine size={20} />
+          锁定范围，生成美食牌库
+        </button>
+      </motion.div>
+    </div>
   );
 };
 
-const ScanningView = ({ setAppStep }) => {
+interface ScanningViewProps {
+  setAppStep: Dispatch<SetStateAction<AppStep>>;
+}
+
+const ScanningView = ({ setAppStep }: ScanningViewProps) => {
   useEffect(() => {
     const timer = setTimeout(() => setAppStep('SWIPE'), 2500);
     return () => clearTimeout(timer);
@@ -75,8 +90,12 @@ const ScanningView = ({ setAppStep }) => {
   );
 };
 
-// --- MATCH MODAL COMPONENT ---
-const MatchModal = ({ matchedItem, onConfirm }) => (
+interface MatchModalProps {
+  matchedItem: FoodItem;
+  onConfirm: () => void;
+}
+
+const MatchModal = ({ matchedItem, onConfirm }: MatchModalProps) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -109,8 +128,16 @@ const MatchModal = ({ matchedItem, onConfirm }) => (
   </motion.div>
 );
 
-const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isGroupMode }) => {
-  const [cards, setCards] = useState(FOOD_ITEMS);
+interface SwipeViewProps {
+  setAppStep: Dispatch<SetStateAction<AppStep>>;
+  shortlist: FoodItem[];
+  setShortlist: Dispatch<SetStateAction<FoodItem[]>>;
+  setSuperLikedItem: Dispatch<SetStateAction<FoodItem | null>>;
+  isGroupMode: boolean;
+}
+
+const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isGroupMode }: SwipeViewProps) => {
+  const [cards, setCards] = useState<FoodItem[]>(FOOD_ITEMS);
   const [showMatchModal, setShowMatchModal] = useState(false);
 
   useEffect(() => {
@@ -124,7 +151,7 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
     setAppStep('SUMMARY');
   };
 
-  const handleAction = (card, action) => {
+  const handleAction = (card: FoodItem, action: 'like' | 'pass' | 'superlike') => {
     if (action === 'like') {
       setShortlist(prev => [...prev, card]);
       setCards(prev => prev.filter(c => c.id !== card.id));
@@ -162,7 +189,16 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
 
   return (
     <div className="h-full w-full flex flex-col items-center bg-background">
-      <CardStack cards={cards} onLike={(c) => handleAction(c, 'like')} onPass={() => handleAction(cards[cards.length - 1], 'pass')} onSuperLike={() => handleAction(cards[cards.length - 1], 'superlike')} />
+      <CardStack 
+        cards={cards} 
+        onLike={(c) => {
+          if (c && c.locationTag) {
+            handleAction(c as FoodItem, 'like');
+          }
+        }} 
+        onPass={() => handleAction(cards[cards.length - 1], 'pass')} 
+        onSuperLike={() => handleAction(cards[cards.length - 1], 'superlike')} 
+      />
       {isGroupMode ? (
         <div className="absolute bottom-0 z-40 w-full h-24 bg-surface-muted p-4 flex items-center justify-center shadow-top">
           <div className="flex items-center">
@@ -187,13 +223,21 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
         </div>
       )}
       <AnimatePresence>
-        {showMatchModal && <MatchModal matchedItem={shortlist[2]} onConfirm={handleConfirmMatch} />}
+        {showMatchModal && shortlist.length >= 3 && <MatchModal matchedItem={shortlist[2]} onConfirm={handleConfirmMatch} />}
       </AnimatePresence>
     </div>
   );
 };
 
-const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGroupMode }) => {
+interface SummaryViewProps {
+  setAppStep: Dispatch<SetStateAction<AppStep>>;
+  shortlist: FoodItem[];
+  setShortlist: Dispatch<SetStateAction<FoodItem[]>>;
+  superLikedItem: FoodItem | null;
+  isGroupMode: boolean;
+}
+
+const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGroupMode }: SummaryViewProps) => {
   const [showPaymentToast, setShowPaymentToast] = useState(false);
 
   const handleCheckout = () => {
@@ -305,8 +349,8 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
 
 export default function Home() {
   const [appStep, setAppStep] = useState<AppStep>('SEARCH');
-  const [shortlist, setShortlist] = useState<any[]>([]);
-  const [superLikedItem, setSuperLikedItem] = useState<any | null>(null);
+  const [shortlist, setShortlist] = useState<FoodItem[]>([]);
+  const [superLikedItem, setSuperLikedItem] = useState<FoodItem | null>(null);
   const [isGroupMode, setIsGroupMode] = useState(false);
 
   const viewVariants = {
@@ -330,12 +374,24 @@ export default function Home() {
         )}
         {appStep === 'SWIPE' && (
           <motion.div key="swipe" variants={viewVariants} initial="initial" animate="enter" exit="exit" className="w-full h-full">
-            <SwipeView setAppStep={setAppStep} shortlist={shortlist} setShortlist={setShortlist} setSuperLikedItem={setSuperLikedItem} isGroupMode={isGroupMode} />
+            <SwipeView 
+              setAppStep={setAppStep} 
+              shortlist={shortlist} 
+              setShortlist={setShortlist} 
+              setSuperLikedItem={setSuperLikedItem} 
+              isGroupMode={isGroupMode} 
+            />
           </motion.div>
         )}
         {appStep === 'SUMMARY' && (
           <motion.div key="summary" variants={viewVariants} initial="initial" animate="enter" exit="exit" className="w-full h-full">
-            <SummaryView setAppStep={setAppStep} shortlist={shortlist} setShortlist={setShortlist} superLikedItem={superLikedItem} isGroupMode={isGroupMode} />
+            <SummaryView 
+              setAppStep={setAppStep} 
+              shortlist={shortlist} 
+              setShortlist={setShortlist} 
+              superLikedItem={superLikedItem} 
+              isGroupMode={isGroupMode} 
+            />
           </motion.div>
         )}
       </AnimatePresence>

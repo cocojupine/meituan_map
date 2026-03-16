@@ -4,7 +4,12 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Check, ChevronDown, MoveRight, MessageSquare, Navigation } from 'lucide-react';
 
-const SummaryView = ({ setAppStep, cartItems }) => {
+interface SummaryViewProps {
+  setAppStep: (step: string) => void;
+  cartItems: { id: number; name: string }[];
+}
+
+const SummaryView = ({ setAppStep, cartItems }: SummaryViewProps) => {
   const [selectedItems, setSelectedItems] = useState<number[]>(cartItems.map(i => i.id));
 
   const toggleItemSelection = (id: number) => {
