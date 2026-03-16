@@ -8,17 +8,18 @@ export interface CardData {
   id: number;
   name: string;
   price: string;
+  originalPrice: string;
+  discountTag: string;
   image: string;
   tags: string[];
   locationTag?: string;
   rating: number;
   sales: string;
-  distance: string;
-  deliveryTime: string;
   avgPrice: number;
-  discount: string;
   deliveryType: string;
   review: string;
+  ranking: string;
+  brandTag: string | null;
 }
 
 // 2. 严格定义 page.tsx 传过来的 Props

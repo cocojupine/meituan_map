@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MapPin, ScanLine, ArrowRight, Navigation, MessageSquare, ArrowLeft } from 'lucide-react';
+import { MapPin, ScanLine, ArrowRight, Navigation, MessageSquare, ArrowLeft, Home as HomeIcon, Compass, ShoppingBag, User } from 'lucide-react';
 import CardStack from '@/components/CardStack';
 import { FOOD_ITEMS } from '@/lib/data';
 
@@ -15,17 +15,18 @@ interface FoodItem {
   id: number;
   name: string;
   price: string;
+  originalPrice: string;
+  discountTag: string;
   image: string;
   locationTag: string;
   tags: string[];
   rating: number;
   sales: string;
-  distance: string;
-  deliveryTime: string;
   avgPrice: number;
-  discount: string;
   deliveryType: string;
   review: string;
+  ranking: string;
+  brandTag: string | null;
 }
 
 // --- VIEW COMPONENTS ---
@@ -49,20 +50,24 @@ const SearchView = ({ setAppStep, setIsGroupMode }: SearchViewProps) => {
         initial={{ y: 20, opacity: 0 }} 
         animate={{ y: 0, opacity: 1 }} 
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="w-full max-w-sm bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-glass text-white"
+        className="w-full max-w-sm bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-glass text-white text-center"
       >
-        <h2 className="text-2xl font-bold tracking-tight">今天在紫金港怎么吃？</h2>
-        <p className="text-sm text-white/60 mt-1">选择模式，让我为你生成专属美食牌库</p>
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">今天吃什么？</h2>
+          <p className="text-xs text-white/50 mt-1">已为您精选附近 128 家特惠餐厅</p>
+        </div>
         <div className="flex items-center gap-2 bg-black/20 p-1 rounded-full my-6">
           <button 
             onClick={() => setLocalIsGroup(false)}
-            className={`w-full text-sm font-semibold py-2 rounded-full transition-colors ${!localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
-            单人快速凑单
+            className={`w-full text-sm font-semibold py-2 rounded-full transition-colors text-center ${!localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
+            <span>一个人吃</span>
+            <span className="block text-xs font-normal text-gray-500">省钱简餐 / 极速达</span>
           </button>
           <button 
             onClick={() => setLocalIsGroup(true)}
-            className={`w-full text-sm font-semibold py-2 rounded-full transition-colors ${localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
-            宿舍组局发牌
+            className={`w-full text-sm font-semibold py-2 rounded-full transition-colors text-center ${localIsGroup ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
+            <span>宿舍组局</span>
+            <span className="block text-xs font-normal text-gray-500">热门精选 / 氛围感</span>
           </button>
         </div>
         <button 
@@ -275,7 +280,9 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
   const totalPrice = shortlist.reduce((acc, item) => acc + parseFloat(item.price), 0);
   const deliveryFee = 5.0;
   const packageFee = 2.0;
-  const finalPrice = totalPrice + deliveryFee + packageFee;
+  const fullDiscount = 15.0;
+  const voucherDiscount = 5.0;
+  const finalPrice = totalPrice + deliveryFee + packageFee - fullDiscount - voucherDiscount;
 
   return (
     <div className="h-full w-full flex flex-col bg-gray-50">
@@ -314,19 +321,33 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
             <p className="text-gray-600">打包费</p>
             <p className="font-medium text-gray-800">¥{packageFee.toFixed(2)}</p>
           </div>
-          <div className="flex justify-between items-center pt-2 text-sm border-b border-gray-200 pb-3">
+          <div className="flex justify-between items-center pt-2 text-sm">
             <p className="text-gray-600">配送费</p>
             <p className="font-medium text-gray-800">¥{deliveryFee.toFixed(2)}</p>
           </div>
+          <div className="flex justify-between items-center pt-2 text-sm text-green-600">
+            <p>满减优惠</p>
+            <p className="font-bold">-¥{fullDiscount.toFixed(2)}</p>
+          </div>
+          <div className="flex justify-between items-center pt-2 text-sm text-green-600 border-b border-gray-200 pb-3">
+            <p>商家代金券</p>
+            <p className="font-bold">-¥{voucherDiscount.toFixed(2)}</p>
+          </div>
           <div className="text-right mt-3">
-            <p className="text-gray-500 text-sm">合计 <span className="font-bold text-red-500 text-2xl">¥{finalPrice.toFixed(2)}</span></p>
+            <p className="text-gray-500 text-sm">合计 <span className="font-bold text-[#FF4A26] text-3xl">¥{finalPrice.toFixed(2)}</span></p>
           </div>
         </div>
       </main>
 
+      {/* God Member Upsell */}
+      <div className="flex-shrink-0 bg-yellow-100 border-t-2 border-b-2 border-dashed border-yellow-300 p-2 text-center">
+        <p className="text-xs text-yellow-800 font-semibold">
+          👑 开通神会员，本单预计再省 ¥8.5，<a href="#" className="underline">立即开通 &gt;</a>
+        </p>
+      </div>
+
       <footer className="flex-shrink-0 p-4 bg-white border-t border-gray-200/80 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
         <div className="flex flex-col items-center w-full">
-          <a href="#" className="text-sm text-blue-500 mb-3">查看堂食路线</a>
           <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold text-lg rounded-full py-3 shadow-lg">
             提交订单
           </button>
@@ -348,6 +369,29 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Bottom Navigation Bar */}
+      <footer className="fixed bottom-0 left-0 right-0 w-full max-w-md mx-auto bg-white/80 backdrop-blur-lg border-t border-gray-200/80">
+        <div className="flex justify-around items-center h-16">
+          <button className="flex flex-col items-center justify-center gap-0.5 text-yellow-500">
+            <HomeIcon size={24} />
+            <span className="text-[10px] font-semibold">首页</span>
+          </button>
+          <button className="flex flex-col items-center justify-center gap-0.5 text-gray-500">
+            <Compass size={24} />
+            <span className="text-[10px] font-semibold">发现</span>
+          </button>
+          <button className="relative flex flex-col items-center justify-center gap-0.5 text-gray-500">
+            <div className="absolute top-1 right-2 w-2 h-2 bg-red-500 rounded-full"></div>
+            <ShoppingBag size={24} />
+            <span className="text-[10px] font-semibold">订单</span>
+          </button>
+          <button className="flex flex-col items-center justify-center gap-0.5 text-gray-500">
+            <User size={24} />
+            <span className="text-[10px] font-semibold">我的</span>
+          </button>
+        </div>
+      </footer>
     </div>
   );
 };
@@ -367,7 +411,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col items-center overflow-hidden">
+    <div className="h-full w-full flex flex-col items-center overflow-hidden pb-16">
       <AnimatePresence mode="wait">
         {appStep === 'SEARCH' && (
           <motion.div key="search" variants={viewVariants} initial="initial" animate="enter" exit="exit" className="w-full h-full">
