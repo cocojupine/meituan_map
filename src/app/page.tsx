@@ -285,7 +285,7 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
   const finalPrice = totalPrice + deliveryFee + packageFee - fullDiscount - voucherDiscount;
 
   return (
-    <div className="h-full w-full flex flex-col bg-gray-50">
+    <div className="h-full w-full flex flex-col bg-gray-50 pb-16">
       <header className="flex-shrink-0 flex items-center justify-between p-4 bg-white border-b border-gray-200">
         <button onClick={() => { setShortlist([]); setAppStep('SWIPE'); }} className="flex items-center gap-1 text-gray-600 font-medium">
           <ArrowLeft size={18} />

@@ -37,13 +37,13 @@ const CardStack = ({ cards, onLike, onPass, onSuperLike }: CardStackProps) => {
       <AnimatePresence>
         {cards.map((card, index) => {
           const isTop = index === cards.length - 1;
-          const y = (cards.length - 1 - index) * 12;
+          const y = (cards.length - 1 - index) * 8; // Reduced from 12 for a tighter stack
           const scale = 1 - (cards.length - 1 - index) * 0.05;
 
           return (
             <motion.div
               key={card.id}
-              className="absolute w-[90%] h-[65%]"
+              className="absolute w-[90%] h-[75%]" // Increased height from 65%
               initial={{ scale, y, opacity: 1 - (cards.length - 1 - index) * 0.2 }}
               animate={{ scale, y, opacity: 1 - (cards.length - 1 - index) * 0.2 }}
               exit={{ x: card.id === cards[cards.length - 1].id ? (Math.random() > 0.5 ? 300 : -300) : 0, opacity: 0 }}
