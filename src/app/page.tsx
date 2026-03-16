@@ -18,6 +18,10 @@ interface FoodItem {
   image: string;
   locationTag: string;
   tags: string[];
+  rating: number;
+  sales: string;
+  distance: string;
+  deliveryTime: string;
 }
 
 // --- VIEW COMPONENTS ---
@@ -134,9 +138,10 @@ interface SwipeViewProps {
   setShortlist: Dispatch<SetStateAction<FoodItem[]>>;
   setSuperLikedItem: Dispatch<SetStateAction<FoodItem | null>>;
   isGroupMode: boolean;
+  setIsGroupMode: Dispatch<SetStateAction<boolean>>;
 }
 
-const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isGroupMode }: SwipeViewProps) => {
+const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isGroupMode, setIsGroupMode }: SwipeViewProps) => {
   const [cards, setCards] = useState<FoodItem[]>(FOOD_ITEMS);
   const [showMatchModal, setShowMatchModal] = useState(false);
 
@@ -189,6 +194,22 @@ const SwipeView = ({ setAppStep, shortlist, setShortlist, setSuperLikedItem, isG
 
   return (
     <div className="h-full w-full flex flex-col items-center bg-background">
+      {/* --- Top Bar Added --- */}
+      <header className="absolute top-0 z-50 w-full p-4 flex items-center justify-center">
+        <div className="flex items-center gap-2 bg-black/20 p-1 rounded-full backdrop-blur-lg border border-white/10">
+          <button 
+            onClick={() => setIsGroupMode(false)}
+            className={`w-28 text-sm font-semibold py-1.5 rounded-full transition-colors ${!isGroupMode ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
+            单人模式
+          </button>
+          <button 
+            onClick={() => setIsGroupMode(true)}
+            className={`w-28 text-sm font-semibold py-1.5 rounded-full transition-colors ${isGroupMode ? 'bg-surface text-text-primary' : 'text-gray-400'}`}>
+            组局模式
+          </button>
+        </div>
+      </header>
+
       <CardStack 
         cards={cards} 
         onLike={(c) => {
@@ -380,6 +401,7 @@ export default function Home() {
               setShortlist={setShortlist} 
               setSuperLikedItem={setSuperLikedItem} 
               isGroupMode={isGroupMode} 
+              setIsGroupMode={setIsGroupMode} 
             />
           </motion.div>
         )}

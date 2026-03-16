@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { PanInfo, motion, useMotionValue, useTransform, AnimatePresence, useAnimation } from "framer-motion";
 import Image from "next/image";
-import { X, Heart } from 'lucide-react';
+import { X, Heart, Star } from 'lucide-react';
 
 interface CardProps {
   id: number;
@@ -11,6 +11,10 @@ interface CardProps {
   price: string;
   image: string;
   tags: string[];
+  rating: number;
+  sales: string;
+  distance: string;
+  deliveryTime: string;
 }
 
 interface SwipeCardProps {
@@ -112,7 +116,19 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initial
       </div>
       <div className="relative h-[35%] bg-surface p-4 flex flex-col">
         <h2 className="text-2xl font-bold text-text-primary tracking-tight">{card.name}</h2>
-        <div className="flex items-center gap-2 mt-2">
+        
+        {/* --- Meituan-like Info Added --- */}
+        <div className="flex items-center text-sm text-text-secondary mt-1.5 gap-3">
+          <div className="flex items-center gap-0.5">
+            <Star size={14} className="text-yellow-400 fill-yellow-400" />
+            <span className="font-bold text-yellow-500">{card.rating}</span>
+          </div>
+          <span>{card.sales}</span>
+          <span>{card.distance}</span>
+          <span>{card.deliveryTime}</span>
+        </div>
+
+        <div className="flex items-center gap-2 mt-2.5">
           {card.tags.map(tag => (
             <span key={tag} className="bg-[#FFF6E5] text-[#FF8C00] px-2 py-1 rounded-md text-xs font-medium">{tag}</span>
           ))}
