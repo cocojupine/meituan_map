@@ -1,5 +1,48 @@
-[00:00:01.650] Server  LOG     ✓ Ready in 1114ms
-[00:00:06.209] Server  WARN    ⚠ Cross origin request detected from 192.168.0.102 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
-Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
-[00:00:06.249] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:22.133] Server  LOG     ✓ Compiled in 95ms
+[00:00:01.535] Server  LOG     ✓ Ready in 992ms
+[00:00:04.997] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:11.248] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1611928549863-4565ad5b0d6c?w=800&q=80" 404
+[00:00:11.826] Browser WARN    Image with src "https://images.unsplash.com/photo-1599043513900-ed6fe01d3833?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:11.826] Browser WARN    Image with src "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:13.868] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:00:14.181] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1611928549863-4565ad5b0d6c?w=800&q=80" 404
+[00:00:16.667] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:00:17.699] Server  ERROR   TimeoutError: The operation was aborted due to timeout
+[00:00:35.998] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:38.722] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:50.736] Browser WARN    Image with src "https://images.unsplash.com/photo-1599043513900-ed6fe01d3833?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:50.736] Browser WARN    Image with src "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:50.736] Browser WARN    Image with src "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:51.126] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1611928549863-4565ad5b0d6c?w=800&q=80" 404
+[00:00:55.509] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:00:55.595] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1611928549863-4565ad5b0d6c?w=800&q=80" 404
+[00:00:56.330] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:00:56.873] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:00:57.484] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:00:57.750] Server  LOG     ✓ Compiled in 197ms
+[00:01:07.305] Server  LOG     ✓ Compiled in 80ms
+[00:08:25.952] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:33.102] Browser WARN    Image with src "https://images.unsplash.com/photo-1599043513900-ed6fe01d3833?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:08:33.103] Browser WARN    Image with src "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:08:33.103] Browser WARN    Image with src "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:08:33.103] Browser WARN    Image with src "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:08:34.670] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1611928549863-4565ad5b0d6c?w=800&q=80" 404
+[00:08:56.329] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:09:02.312] Browser WARN    Image with src "https://images.unsplash.com/photo-1599043513900-ed6fe01d3833?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:09:02.312] Browser WARN    Image with src "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:09:02.312] Browser WARN    Image with src "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:09:02.312] Browser WARN    Image with src "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:09:02.527] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1611928549863-4565ad5b0d6c?w=800&q=80" 404
+[00:09:30.393] Server  LOG     ✓ Compiled in 122ms
+[00:09:42.379] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:09:54.690] Browser WARN    Image with src "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:09:54.690] Browser WARN    Image with src "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:09:54.690] Browser WARN    Image with src "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:09:54.690] Browser WARN    Image with src "https://images.unsplash.com/photo-1599043513900-ed6fe01d3833?w=800&q=80" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:09:55.950] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1611928549863-4565ad5b0d6c?w=800&q=80" 404
+[00:09:56.985] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1611928549863-4565ad5b0d6c?w=800&q=80" 404
+[00:09:57.207] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:09:57.796] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:09:58.476] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:09:59.355] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.
+[00:10:05.107] Server  ERROR   ⨯ "upstream image response failed for" "https://images.unsplash.com/photo-1611928549863-4565ad5b0d6c?w=800&q=80" 404
+[00:10:08.978] Browser ERROR   unhandledRejection: Error: controls.start() should only be called after a component has mounted. Consider calling within a useEffect hook.

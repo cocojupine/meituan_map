@@ -285,7 +285,7 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
   const finalPrice = totalPrice + deliveryFee + packageFee - fullDiscount - voucherDiscount;
 
   return (
-    <div className="h-full w-full flex flex-col bg-gray-50 pb-16">
+    <div className="h-full w-full flex flex-col bg-gray-50">
       <header className="flex-shrink-0 flex items-center justify-between p-4 bg-white border-b border-gray-200">
         <button onClick={() => { setShortlist([]); setAppStep('SWIPE'); }} className="flex items-center gap-1 text-gray-600 font-medium">
           <ArrowLeft size={18} />
@@ -369,29 +369,6 @@ const SummaryView = ({ setAppStep, shortlist, setShortlist, superLikedItem, isGr
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Bottom Navigation Bar */}
-      <footer className="fixed bottom-0 left-0 right-0 w-full max-w-md mx-auto bg-white/80 backdrop-blur-lg border-t border-gray-200/80">
-        <div className="flex justify-around items-center h-16">
-          <button className="flex flex-col items-center justify-center gap-0.5 text-yellow-500">
-            <HomeIcon size={24} />
-            <span className="text-[10px] font-semibold">首页</span>
-          </button>
-          <button className="flex flex-col items-center justify-center gap-0.5 text-gray-500">
-            <Compass size={24} />
-            <span className="text-[10px] font-semibold">发现</span>
-          </button>
-          <button className="relative flex flex-col items-center justify-center gap-0.5 text-gray-500">
-            <div className="absolute top-1 right-2 w-2 h-2 bg-red-500 rounded-full"></div>
-            <ShoppingBag size={24} />
-            <span className="text-[10px] font-semibold">订单</span>
-          </button>
-          <button className="flex flex-col items-center justify-center gap-0.5 text-gray-500">
-            <User size={24} />
-            <span className="text-[10px] font-semibold">我的</span>
-          </button>
-        </div>
-      </footer>
     </div>
   );
 };
@@ -411,7 +388,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col items-center overflow-hidden pb-16">
+    <div className="h-full w-full flex flex-col items-center overflow-hidden">
       <AnimatePresence mode="wait">
         {appStep === 'SEARCH' && (
           <motion.div key="search" variants={viewVariants} initial="initial" animate="enter" exit="exit" className="w-full h-full">
