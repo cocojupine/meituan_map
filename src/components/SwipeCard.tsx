@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { PanInfo, motion, useMotionValue, useTransform, AnimatePresence, useAnimation } from "framer-motion";
 import Image from "next/image";
-import { X, Heart, Star } from 'lucide-react';
+import { X, Heart, Star, MessageCircle } from 'lucide-react';
 
 interface CardProps {
   id: number;
@@ -15,6 +15,10 @@ interface CardProps {
   sales: string;
   distance: string;
   deliveryTime: string;
+  avgPrice: number;
+  discount: string;
+  deliveryType: string;
+  review: string;
 }
 
 interface SwipeCardProps {
@@ -63,6 +67,26 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initial
     } else if (info.offset.y < -100) {
       onSuperLike();
     }
+  };
+
+  const renderPill = (text: string) => {
+    if (!text) return null;
+    let bgColor = 'bg-gray-100';
+    let textColor = 'text-gray-600';
+
+    if (text.includes('专送')) {
+      bgColor = 'bg-yellow-100';
+      textColor = 'text-yellow-700';
+    } else if (text.includes('减') || text.includes('折')) {
+      bgColor = 'bg-red-100';
+      textColor = 'text-red-600';
+    }
+
+    return (
+      <span key={text} className={`px-2 py-0.5 rounded-full text-xs font-medium ${bgColor} ${textColor}`}>
+        {text}
+      </span>
+    );
   };
 
   return (
@@ -114,30 +138,36 @@ const SwipeCard = ({ card, isTop, onLike, onPass, onSuperLike, initialY, initial
           />
         <div className="absolute bottom-0 w-full h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
-      <div className="relative h-[35%] bg-surface p-4 flex flex-col">
-        <h2 className="text-2xl font-bold text-text-primary tracking-tight">{card.name}</h2>
-        
-        {/* --- Meituan-like Info Added --- */}
-        <div className="flex items-center text-sm text-text-secondary mt-1.5 gap-3">
+      <div className="relative h-[35%] bg-surface p-4 flex flex-col justify-between">
+        {/* Row 1: Title & Price */}
+        <div className="flex justify-between items-start">
+          <h2 className="text-xl font-bold text-text-primary tracking-tight w-3/4">{card.name}</h2>
+          <p className="text-red-500 font-bold">
+            <span className="text-lg">¥</span>
+            <span className="text-4xl">{card.price.split('.')[0]}</span>
+            {card.price.includes('.') && <span className="text-lg">.{card.price.split('.')[1]}</span>}
+          </p>
+        </div>
+
+        {/* Row 2: Social Proof */}
+        <div className="flex items-center text-sm text-gray-500 gap-2 -mt-1">
           <div className="flex items-center gap-0.5">
             <Star size={14} className="text-yellow-400 fill-yellow-400" />
             <span className="font-bold text-yellow-500">{card.rating}</span>
           </div>
           <span>{card.sales}</span>
-          <span>{card.distance}</span>
-          <span>{card.deliveryTime}</span>
+          <span>人均¥{card.avgPrice}</span>
         </div>
 
-        <div className="flex items-center gap-2 mt-2.5">
-          {card.tags.map(tag => (
-            <span key={tag} className="bg-[#FFF6E5] text-[#FF8C00] px-2 py-1 rounded-md text-xs font-medium">{tag}</span>
-          ))}
+        {/* Row 3: Marketing & Distance */}
+        <div className="flex items-center gap-2">
+          {[card.discount, card.deliveryType].map(renderPill)}
         </div>
-        <div className="flex-grow" />
-        <div className="flex justify-end items-end">
-          <p className="text-price-highlight text-4xl font-bold">
-            <span className="text-2xl">¥</span>{card.price}
-          </p>
+
+        {/* Row 4: Featured Review */}
+        <div className="bg-gray-100/80 p-2 rounded-lg flex items-start gap-2">
+          <MessageCircle size={16} className="text-gray-400 flex-shrink-0 mt-0.5" />
+          <p className="text-xs text-gray-600 leading-snug">{card.review}</p>
         </div>
       </div>
     </motion.div>

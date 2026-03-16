@@ -10,11 +10,15 @@ export interface CardData {
   price: string;
   image: string;
   tags: string[];
-  locationTag?: string; // 如果有的卡片没有标签，可以加上 ? 设为可选
+  locationTag?: string;
   rating: number;
   sales: string;
   distance: string;
   deliveryTime: string;
+  avgPrice: number;
+  discount: string;
+  deliveryType: string;
+  review: string;
 }
 
 // 2. 严格定义 page.tsx 传过来的 Props
